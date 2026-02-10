@@ -2,13 +2,15 @@
 
 This document provides comprehensive results from all 33 experiments conducted during the HomeCheck project development.
 
+**📂 View All Experiment Notebooks:** [Google Drive - Experiments Folder](https://drive.google.com/drive/folders/1jcrgA1BBGqXMLVEtDEkuUHimhAUjcaf6?usp=sharing)
+
 ---
 
 ## Experimental Overview
 
 **Total Experiments:** 33  
 **Phases:** 2 (Architecture Selection + Hyperparameter Optimization)  
-**Duration:** [Your project timeline]  
+**Duration:** 1 year  
 **Computing Platform:** Google Colab with GPU acceleration
 
 ---
@@ -214,13 +216,9 @@ This document provides comprehensive results from all 33 experiments conducted d
 
 All experiments can be reproduced using:
 1. Clone this repository
-2. Access the dataset from [Google Drive link]
-3. Run experiment notebooks in `experiments/` folder
-4. Each notebook is self-contained with full configuration
-
-**Experiment notebooks available:**
-- Phase 1: `phase1_[architecture].ipynb`
-- Phase 2: `phase2_[architecture]_[optimizer].ipynb`
+2. Access the dataset from [Google Drive - Dataset]((https://drive.google.com/drive/folders/1o0v40q8LIlEa4qsWHE6d7QDgDI59HgQL?usp=drive_link))
+3. Access experiment notebooks from [Google Drive - Experiments]((https://drive.google.com/drive/folders/1jcrgA1BBGqXMLVEtDEkuUHimhAUjcaf6?usp=sharing))
+4. Run notebooks in Google Colab or local Jupyter environment
 
 ---
 
