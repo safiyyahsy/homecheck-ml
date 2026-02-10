@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block title %}homeCheck - Modern Home Inspection Services{% endblock %}
+
+{% block body_class %}homepage{% endblock %}
+
+{% block content %}
+    <!-- ===== HERO SECTION ===== -->
+    <!-- Main landing area with home background and 3D elements -->
+    <section class="hero" id="home">
+        <!-- 3D Three.js canvas will be inserted here -->
+        <canvas id="hero-canvas" class="hero-canvas"></canvas>
+        
+        <!-- Overlay for better text readability -->
+        <div class="hero-overlay"></div>
+        
+        <!-- Main hero content -->
+        <div class="hero-content">
+            <!-- Main headline with home-modern styling -->
+            <h1 class="hero-title" data-aos="fade-up" data-aos-duration="1000">
+                <span class="title-line-1">Welcome back,</span>
+                <span class="title-line-2">your home home</span>
+                <span class="title-line-3">is safe with us.</span>
+            </h1>
+            
+            <!-- Subtitle description -->
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+                Preserving the charm of home living with modern inspection technology
+            </p>
+            
+            <!-- Call-to-action button -->
+            <div class="hero-cta" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
+                <a href="{{ url_for('inspection') }}" class="cta-button primary">
+                    <span class="button-text">Start Inspection</span>
+                    <span class="button-icon">🏠</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Decorative floating magnifying glass -->
+        <div class="floating-magnifier" data-aos="zoom-in" data-aos-delay="800">
+            <div class="magnifier-glass">🔍</div>
+        </div>
+        
+        <!-- Decorative home elements -->
+        <div class="home-decorations">
+            <!-- Animated falling leaves -->
+            <div class="falling-leaves">
+                <span class="leaf">🍃</span>
+                <span class="leaf">🍂</span>
+                <span class="leaf">🌿</span>
+            </div>
+            
+            <!-- Navigation dots -->
+            <div class="hero-nav-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROBLEM IDENTIFICATION SECTION ===== -->
+    <!-- Section to help users identify common home problems -->
+    <section class="problems-section" id="inspect">
+        <!-- Section background with home textures -->
+        <div class="section-background">
+            <div class="texture-overlay wood-grain"></div>
+        </div>
+        
+        <div class="container">
+            <!-- Section header -->
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title home-style">
+                    Unsure where to start?
+                </h2>
+                <p class="section-subtitle">
+                    Identify common home issues with our smart detection system
+                </p>
+            </div>
+            
+            <!-- Problems grid layout -->
+            <div class="problems-grid">
+                <!-- Problem 1: Peeling W-->
+                <div class="problem-card" data-aos="flip-left" data-aos-delay="100">
+                    <div class="card-image">
+                        <!-- Replace with: images/problems/peeling-wood.jpg -->
+                        <img src="static/images/peeling-wood.jpg" alt="Peeling damage">
+                    </div>
+                    <div class="card-content">
+                        <div class="problem-icon home-wood">🎯</div>
+                        <h3 class="card-title">Peeling</h3>
+                        <span class="severity major">Major Issue</span>
+                        <p class="card-description">Peeling paint or wood finishes that expose underlying surfaces and affect both appearance and durability.</p>
+                    </div>
+                </div>
+                
+                <!-- Problem 2: Algae Growth -->
+                <div class="problem-card" data-aos="flip-left" data-aos-delay="200">
+                    <div class="card-image">
+                        <img src="static/images/wall algae.jpg" alt="Algae damage">
+                    </div>
+                    <div class="card-content">
+                        <div class="problem-icon home-nature">🌿</div>
+                        <h3 class="card-title">Algae Growth</h3>
+                        <span class="severity moderate">Moderate Issue</span>
+                        <p class="card-description">Organic growth on damp surfaces, often caused by poor drainage or ventilation. Can lead to staining and surface decay.</p>
+                    </div>
+                </div>
+                
+                <!-- Problem 3: Staining -->
+                <div class="problem-card" data-aos="flip-left" data-aos-delay="300">
+                    <div class="card-image">
+                        <img src="static/images/stain wall.jpg" alt="Staining damage">
+                    </div>
+                    <div class="card-content">
+                        <div class="problem-icon home-maintenance">🔧</div>
+                        <h3 class="card-title">Surface Stains</h3>
+                        <span class="severity minor">Minor Issue</span>
+                        <p class="card-description">Discoloration or blotchy patches on walls due to water damage, aging paint, or surface buildup.</p>
+                    </div>
+                </div>
+                
+                <!-- Problem 4: Minor Crack  -->
+                <div class="problem-card" data-aos="flip-left" data-aos-delay="400">
+                    <div class="card-image">
+                        <img src="static/images/minor crack.jpg" alt="Minor crack damage">
+                    </div>
+                    <div class="card-content">
+                        <div class="problem-icon home-crack">🏠</div>
+                        <h3 class="card-title">Minor Crack</h3>
+                        <span class="severity minor">Minor Issue</span>
+                        <p class="card-description">Thin cracks in walls or surfaces, usually caused by natural settling or slight material shifts over time.</p>
+                    </div>
+                </div>
+
+                <!-- Problem 5: Major Crack  -->
+                <div class="problem-card" data-aos="flip-left" data-aos-delay="500">
+                    <div class="card-image">
+                        <img src="static/images/major crack.png" alt="Major crack damage">
+                    </div>
+                    <div class="card-content">
+                        <div class="problem-icon home-crack">🏠</div>
+                        <h3 class="card-title">Major Crack</h3>
+                        <span class="severity major">Major Issue</span>
+                        <p class="card-description">Deep or wide cracks that may signal structural stress or foundation problems. Often needs professional attention.</p>
+                    </div>
+                </div>
+
+                <!-- Problem 6: Spalling -->
+                <div class="problem-card" data-aos="flip-left" data-aos-delay="600">
+                    <div class="card-image">
+                        <img src="static/images/spalling.jpg" alt="Spalling damage">
+                    </div>
+                    <div class="card-content">
+                        <div class="problem-icon home-crack">🏠</div>
+                        <h3 class="card-title">Spalling</h3>
+                        <span class="severity major">Major Issue</span>
+                        <p class="card-description">Surface chipping or flaking of concrete due to moisture penetration and material breakdown. Can worsen over time if untreated.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES SECTION ===== -->
+    <!-- Showcase of main services with home-modern design -->
+    <section class="services-section" id="services">
+        <!-- Overlay for better text readability -->
+        <div class="services-overlay"></div>
+        
+        <!-- Animated background particles -->
+        <div class="particles-container" id="particles"></div>
+    
+
+        <div class="container">
+            <!-- Services header -->
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title services-title">
+                    <span class="title-word">WHAT</span>
+                    <span class="title-word">HOMECHECK</span>
+                    <span class="title-word">CAN DO</span>
+                </h2>
+                <p class="section-subtitle light">
+                    From scan to solution — let’s take care of your home, smart and simple.
+                </p>
+            </div>
+            
+            <!-- Services grid -->
+            <div class="services-grid">
+                <!-- Service 1: AI Inspection -->
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="service-content">
+                        <div class="service-icon ai-inspection">
+                            <div class="icon-inner"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- New info box below circle -->
+                    <div class="service-info-box">
+                        <h3 class="service-title">AI-Powered Defect Detection</h3>
+                        <p class="service-description">
+                            Quickly scan your home with AI trained to spot common surface issues and defects — no expert needed.
+                        </p>
+                        <div class="service-features">
+                            <span class="feature">• Surface crack detection</span>
+                            <span class="feature">• Peeling and stain checks</span>
+                            <span class="feature">• Real-time analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 2: Smart Reports -->
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="service-content">
+                        <div class="service-icon reports-tracking">
+                            <div class="icon-inner"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="service-info-box">
+                        <h3 class="service-title">Instant Digital Reports</h3>
+                        <p class="service-description">
+                            Get an auto-generated summary of detected issues, complete with repair tips and ready-to-send email templates.     
+                        </p>
+                        <div class="service-features">
+                            <span class="feature">• Detection summary</span>
+                            <span class="feature">• Suggested next steps</span>
+                            <span class="feature">• Email-ready report</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 3: Care Guide -->
+                <div class="service-card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="service-content">
+                        <div class="service-icon care-guide">
+                            <div class="icon-inner"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="service-info-box">
+                        <h3 class="service-title">Home Maintenance Guide</h3>
+                        <p class="service-description">
+                            Learn how to care for your home with practical tips, seasonal checklists, and simple maintenance know-how.
+                        </p>
+                        <div class="service-features">
+                            <span class="feature">• DIY repair tips</span>
+                            <span class="feature">• Seasonal checklists</span>
+                            <span class="feature">• Maintenance reminders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WEB APP EXPERIENCE SECTION ===== -->
+    <!-- Highlight app-like features in browser -->
+    <section class="app-section" id="webapp">
+        <div class="container">
+            <div class="app-container">
+                <!-- App content (left side) -->
+                <div class="app-content" data-aos="fade-right">
+                    <h2 class="app-title">
+                        Every home tells a story.
+                        Your AI Home Inspector,<br>
+                        <span class="title-accent, color: #FFFFFF">Directly in Your Browser</span>
+                    </h2>
+                    <p class="app-description">
+                        No download needed. HomeCheck gives you instant access to smart, AI-powered 
+                        inspection tools — made simple for everyday homeowners and future buyers.
+                    </p>
+                    
+                    <!-- App features list -->
+                    <div class="app-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">🧠</span>
+                            <span class="feature-text">AI-based issue detection</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📤</span>
+                            <span class="feature-text">No app install required</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📧</span>
+                            <span class="feature-text">Auto-generated inspection report</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Download button -->
+                    <div class="app-cta">
+                        <a href="{{ url_for('inspection') }}" class="cta-button secondary">
+                            <span class="button-text">Start Your Journey</span>
+                            <span class="button-icon">📱</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 3D Phone mockup (right side) -->
+                <div class="app-mockup" data-aos="fade-left">
+                    <div class="phone-3d">
+                        <!-- Phone frame -->
+                        <div class="phone-frame">
+                            <!-- Phone screen -->
+                            <div class="phone-screen">
+                                <!-- App interface mockup -->
+                                <div class="app-interface">
+                                    <div class="app-header">
+                                        <span class="app-time">9:41</span>
+                                        <span class="app-signal">📶</span>
+                                    </div>
+                                    
+                                    <div class="app-logo-section">
+                                        <div class="app-logo">🏡</div>
+                                        <h4 class="app-name">homeCheck</h4>
+                                        <p class="app-tagline">HOME INSPECTION</p>
+                                    </div>
+                                    
+                                    <!-- Replace with: images/app/app-screenshot.jpg -->
+                                    <div class="app-preview">
+                                        <div class="preview-home">🏠</div>
+                                        <p class="preview-text">home analysis in progress...</p>
+                                    </div>
+                                    
+                                    <div class="app-actions">
+                                        <button class="app-button">📷 Scan home</button>
+                                        <button class="app-button secondary">📊 View Reports</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Phone shadow and reflections -->
+                        <div class="phone-shadow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

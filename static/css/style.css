@@ -1,0 +1,1698 @@
+/* ===== CSS VARIABLES (Custom Properties) ===== */
+/* These are reusable values throughout the CSS */
+:root {
+  /* Main Brand Colors - From Your Design */
+  --main-background: #192438;        /* Main dark background */
+  --main-text-light: #F5F0EA;        /* Light text for dark backgrounds */
+  --main-text-dark: #192438;         /* Dark text for light backgrounds */
+  
+  /* Blue-Silver Cottage Theme - Updated Color Palette */
+  --cottage-blue: #4a90a4;           /* Main cottage blue from your image */
+  --cottage-silver: #b8c5d1;         /* Silver/grey blue accents */
+  --cottage-steel: #6b7d8c;          /* Steel blue for structure */
+  --cottage-slate: #2c3e50;          /* Dark slate for contrast */
+  --cottage-cream: #f4f6f8;          /* Cool cream background */
+  --cottage-white: #ffffff;          /* Pure white for contrast */
+  --cottage-navy: var(--main-background); /* Use main background for navy */
+  
+  /* Modern Blue Accents */
+  --modern-blue: #5dade2;            /* Bright modern blue */
+  --modern-silver: #95a5a6;          /* Modern silver */
+  --modern-steel: #34495e;           /* Steel blue for backgrounds */
+  --modern-light: #ecf0f1;           /* Light grey-blue */
+  --modern-dark: var(--main-background); /* Use main background */
+  
+  /* Text Colors Based on Background */
+  --text-on-dark: var(--main-text-light);  /* Light text on dark backgrounds */
+  --text-on-light: var(--main-text-dark);  /* Dark text on light backgrounds */
+  
+  /* Silver Metallic Gradients */
+  --silver-gradient: linear-gradient(135deg, #b8c5d1 0%, #95a5a6 50%, #7f8c8d 100%);
+  --blue-gradient: linear-gradient(135deg, #4a90a4 0%, #5dade2 50%, #3498db 100%);
+  --steel-gradient: linear-gradient(135deg, #6b7d8c 0%, var(--main-background) 100%);
+  --main-gradient: linear-gradient(135deg, var(--main-background) 0%, #2c3e50 100%);
+  
+  /* Typography Scale */
+  --font-primary: 'Agbalumo', 'Crimson Text', serif;      /* Your custom font */
+  --font-secondary: 'Inter', sans-serif;                   /* Modern sans-serif for body */
+  --font-accent: 'Agbalumo', 'Playfair Display', serif;    /* Your custom font for accents */
+  
+  --font-hero: 'Agbalumo', serif; /* Elegant serif for hero titles */
+  --font-headings: 'DM Sans', sans-serif; /* Clean modern font for headings */
+  --font-body-modern: 'DM Sans', sans-serif; /* Modern sans-serif for body text */
+  
+  /* Spacing Scale (based on 8px grid) */
+  --space-xs: 0.5rem;   /* 8px */
+  --space-sm: 1rem;     /* 16px */
+  --space-md: 1.5rem;   /* 24px */
+  --space-lg: 2rem;     /* 32px */
+  --space-xl: 3rem;     /* 48px */
+  --space-xxl: 4rem;    /* 64px */
+  
+  /* Border Radius for modern feel */
+  --radius-sm: 8px;     /* Small rounded corners */
+  --radius-md: 16px;    /* Medium rounded corners */
+  --radius-lg: 24px;    /* Large rounded corners */
+  
+  /* Blue-Silver Box Shadows */
+  --shadow-sm: 0 2px 8px rgba(25, 36, 56, 0.15);
+  --shadow-md: 0 4px 16px rgba(25, 36, 56, 0.2);
+  --shadow-lg: 0 8px 32px rgba(25, 36, 56, 0.25);
+  --shadow-silver: 0 4px 20px rgba(184, 197, 209, 0.3);
+  
+  /* Animation Timing */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ===== GLOBAL RESET AND BASE STYLES ===== */
+/* Remove default browser styling and set consistent base */
+* {
+  margin: 0;                    /* Remove default margins */
+  padding: 0;                   /* Remove default padding */
+  box-sizing: border-box;       /* Include padding/border in element size */
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;      /* Smooth scrolling when clicking navigation */
+  font-size: 16px;             /* Base font size (1rem = 16px) */
+}
+
+/* Body styling with your exact color scheme */
+body {
+  font-family: var(--font-secondary);  /* Main font for body text */
+  line-height: 1.6;                    /* Comfortable reading line height */
+  color: var(--text-on-light);         /* Dark text for light backgrounds */
+  background-color: var(--cottage-cream); /* Light background */
+  overflow-x: hidden;                  /* Prevent horizontal scroll */
+  -webkit-font-smoothing: antialiased; /* Smooth fonts on webkit browsers */
+  -moz-osx-font-smoothing: grayscale;  /* Smooth fonts on Firefox */
+}
+
+/* Container for consistent max-width and centering */
+.container {
+  max-width: 1200px;           /* Maximum content width */
+  margin: 0 auto;              /* Center the container */
+  padding: 0 var(--space-lg);  /* Side padding for mobile */
+}
+
+/* ===== HEADER NAVIGATION ===== */
+/* Fixed header that stays at top during scroll */
+.header {
+  position: fixed;                     /* Stay in place during scroll */
+  top: 0;                             /* Stick to top of viewport */
+  left: 0;                            /* Align to left edge */
+  right: 0;                           /* Stretch to right edge */
+  z-index: 1000;                      /* Appear above other content */
+  background: rgba(25, 36, 56); /* Semi-transparent cottage cream */
+  backdrop-filter: blur(20px);        /* Blur background for glass effect */
+  -webkit-backdrop-filter: blur(20px); /* Safari support for backdrop blur */
+  border-bottom: 1px solid rgba(140, 69, 19, 0.1); /* Subtle bottom border */
+  transition: all var(--transition-normal); /* Smooth changes on scroll */
+}
+
+/* Header when scrolled (more opaque) */
+.header.scrolled {
+  background: rgba(244, 246, 248, 0.95); /* More opaque when scrolled */
+  box-shadow: var(--shadow-sm);           /* Add shadow when scrolled */
+}
+
+/* Navigation container layout */
+.nav-container {
+  display: flex;                    /* Flexbox for layout */
+  justify-content: space-between;   /* Space between logo and nav */
+  align-items: center;              /* Vertical center alignment */
+  padding: var(--space-md) var(--space-lg); /* Padding for breathing room */
+  max-width: 1400px;               /* Wider than content for nav */
+  margin: 0 auto;                  /* Center the nav container */
+}
+
+/* Logo styling with blue-silver typography */
+.logo {
+  font-family: 'Monsieur La Doulaise';  /* Your custom font for branding */
+  font-size: 1.75rem;               /* Large enough to be prominent */
+  font-weight: 700;                 /* Bold for strong brand presence */
+  color: var(--cottage-blue);       /* Main cottage blue */
+  text-decoration: none;            /* Remove underline if it's a link */
+}
+
+/* Cottage part of logo in blue */
+.logo-cottage {
+  color: var(--cottage-blue);       /* Main cottage blue */
+}
+
+/* Check part of logo in silver */
+.logo-check {
+  color: var(--cottage-silver);     /* Silver accent */
+}
+
+/* Navigation menu layout */
+.nav-menu ul {
+  display: flex;                    /* Horizontal menu layout */
+  list-style: none;                 /* Remove bullet points */
+  gap: var(--space-xl);             /* Space between menu items */
+  margin: 0;                        /* Remove default margin */
+  padding: 0;                       /* Remove default padding */
+}
+
+/* Individual navigation links */
+.nav-link {
+  font-family: var(--font-secondary); /* Clean modern font */
+  font-weight: 500;                    /* Medium weight for readability */
+  font-size: 0.9rem;                   /* Slightly smaller than body text */
+  color: var(--text-on-dark);         /* Dark color for light backgrounds */
+  text-decoration: none;               /* Remove underline */
+  text-transform: uppercase;           /* Uppercase for modern look */
+  letter-spacing: 0.05em;              /* Slightly spaced letters */
+  position: relative;                  /* For positioning pseudo-elements */
+  transition: color var(--transition-normal); /* Smooth color changes */
+}
+
+/* Hover effect for navigation links */
+.nav-link:hover {
+  color: var(--cottage-blue);            /* Change to cottage blue on hover */
+}
+
+/* Underline effect on navigation links */
+.nav-link::after {
+  content: '';                        /* Empty content for pseudo-element */
+  position: absolute;                 /* Position relative to parent */
+  bottom: -4px;                      /* Position below text */
+  left: 50%;                         /* Start from center */
+  width: 0;                          /* Start with no width */
+  height: 2px;                       /* Thin underline */
+  background: var(--cottage-blue);    /* Blue underline */
+  transition: all var(--transition-normal); /* Smooth animation */
+  transform: translateX(-50%);        /* Center the line */
+}
+
+/* Expand underline on hover */
+.nav-link:hover::after {
+  width: 100%;                       /* Full width on hover */
+}
+
+/* Mobile menu toggle (hamburger) - hidden on desktop */
+.mobile-toggle {
+  display: none;                     /* Hidden by default */
+  flex-direction: column;            /* Stack lines vertically */
+  cursor: pointer;                   /* Pointer cursor on hover */
+  gap: 4px;                         /* Space between hamburger lines */
+}
+
+/* Hamburger menu lines */
+.mobile-toggle span {
+  width: 25px;                       /* Width of hamburger lines */
+  height: 3px;                       /* Thickness of lines */
+  background: var(--cottage-blue);    /* Blue color matching logo */
+  border-radius: 2px;                /* Slightly rounded ends */
+  transition: all var(--transition-normal); /* Smooth animations */
+}
+
+.dm-sans-text {
+  font-family: 'DM Sans', sans-serif; /* Use DM Sans for text */
+  font-weight: 700;                   /* Regular weight */
+  color: var(--text-on-light);        /* Dark text for light backgrounds */
+  letter-spacing: -0.02em;
+}
+
+/* ===== HERO SECTION ===== */
+/* Main landing area with your exact gradient */
+.hero {
+  position: relative;                /* For positioning child elements */
+  height: 100vh;                    /* Full viewport height */
+  display: flex;                    /* Flexbox for centering content */
+  align-items: center;              /* Vertical center alignment */
+  justify-content: center;          /* Horizontal center alignment */
+  overflow: hidden;                 /* Hide overflowing decorative elements */
+  /*background: var(--main-gradient);  /* Your main background gradient */
+
+  background:
+    /*linear-gradient(135deg, 
+    /*  rgba(3, 45, 104, 0.9) 0%,        /* Main dark blue */
+    /*  rgba(25, 37, 79, 0.8) 50%,       /* Primary blue */
+    /*  rgba(33, 53, 88, 0.7) 100%),      /* Secondary blue */
+    url('/static/images/cottage-bg.png'); /* Cottage interior image */
+
+  background-size: cover;            /* Cover entire hero area */
+  background-position: center;       /* Center the background image */
+  background-repeat: no-repeat;      /* Prevent image tiling */
+  background-attachment: fixed; /* Fixed background for parallax effect */
+  }
+
+/* Three.js canvas for 3D background effects */
+.hero-canvas {
+  position: absolute;               /* Position behind content */
+  top: 0;                          /* Cover full area */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;                      /* Behind content but above background */
+}
+
+/* Overlay for better text readability over background */
+.hero-overlay {
+  position: absolute;               /* Cover entire hero area */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(104, 99, 99, 0.1); /* Semi-transparent navy overlay */
+  z-index: 2;                       /* Above canvas, below content */
+}
+
+/* Main hero content container */
+.hero-content {
+  position: relative;               /* Above overlay */
+  z-index: 3;                      /* Above overlay and canvas */
+  text-align: center;              /* Center align all text */
+  color: var(--text-on-dark);      /* Light text for dark background */
+  max-width: 800px;                /* Limit width for readability */
+  padding: 0 var(--space-lg);      /* Side padding */
+}
+
+/* Main hero title with cottage-modern styling */
+.hero-title {
+  font-family: 'Agbalumo', var(--font-accent), serif;  /* Elegant serif font */
+  font-size: clamp(2.5rem, 8vw, 5rem); /* Responsive font size */
+  font-weight: 400;                  /* Bold for impact */
+  line-height: 1.1;                  /* Tight line height for impact */
+  margin-bottom: var(--space-lg);    /* Space before subtitle */
+  color: #ffffff;                /* White text for contrast */
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.5), 
+    0 4px 8px rgba(0,0,0,0.3),
+    0 8px 16px rgba(0,0,0,0.2); /* Subtle text shadow */
+  letter-spacing: 0.02em;
+  }
+
+/* Individual title lines for animation */
+.title-line-1,
+.title-line-2,
+.title-line-3 {
+  display: block;                   /* Each line on separate row */
+  opacity: 0;                      /* Start invisible for animation */
+  transform: translateY(30px);     /* Start below final position */
+  animation: fadeInUp 1s ease-out forwards; /* Animate in */
+  text-align: center;
+}
+
+/* Staggered animation delays for title lines */
+.title-line-1 { animation-delay: 0.2s; }
+.title-line-2 { animation-delay: 0.4s; }
+.title-line-3 { animation-delay: 0.6s; }
+
+/* Hero subtitle with supporting information */
+.hero-subtitle {
+  font-family: var(--font-headings); /* Clean modern font */
+  font-style: italic;
+  font-size: 1.15rem;                 /* Larger than body text */
+  font-weight: 400;                   /* Regular weight */
+  color: var(--text-on-dark);         /* Light text on dark background */
+  opacity: 0.9;                       /* Slightly transparent */
+  margin-bottom: var(--space-xl);     /* Space before CTA */
+  max-width: 600px;                   /* Limit width for readability */
+  margin-left: auto;                  /* Center with max-width */
+  margin-right: auto;
+}
+
+/* Call-to-action button container */
+.hero-cta {
+  margin-top: var(--space-xl);       /* Space from subtitle */
+}
+
+/* Primary CTA button styling */
+.cta-button {
+  display: inline-flex;              /* Inline flex for icon + text */
+  align-items: center;               /* Vertical center alignment */
+  gap: var(--space-sm);              /* Space between text and icon */
+  padding: var(--space-sm) var(--space-lg); /* Generous padding */
+  background: rgba(25,36,56, 1);   /* Blue gradient background */
+  color: var(--cottage-white);        /* White text */
+  text-decoration: none;             /* Remove underline */
+  border-radius: var(--radius-lg);   /* Rounded corners */
+  border: 1px solid #ffffff; /* White border for contrast */
+  font-family: 'DM Sans'; /* Modern font */
+  font-weight: 400;                  /* Semi-bold */
+  font-size: 1rem;                   /* Standard size */
+  text-transform:initial; /* Initial case for readability */
+  letter-spacing: 0.05em;            /* Slightly spaced letters */
+  box-shadow: var(--shadow-lg);      /* Deep shadow for elevation */
+  transition: all var(--transition-normal); /* Smooth animations */
+  position: relative;                /* For hover effects */
+  overflow: hidden;                  /* Hide overflow for effects */
+}
+
+/* Hover effect for CTA button */
+.cta-button:hover {
+  transform: translateY(-3px);       /* Lift effect on hover */
+  box-shadow: 0 12px 40px rgba(74, 144, 164, 0.4); /* Blue shadow */
+}
+
+/* Shine effect on button hover */
+.cta-button::before {
+  content: '';                       /* Empty pseudo-element */
+  position: absolute;                /* Position within button */
+  top: 0;
+  left: -100%;                      /* Start off-screen left */
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent);                    /* Shine gradient */
+  transition: left 0.5s ease;       /* Smooth movement */
+}
+
+/* Move shine across button on hover */
+.cta-button:hover::before {
+  left: 100%;                       /* Move across to right */
+}
+
+/* Secondary button variant */
+.cta-button.secondary {
+  background: rgba(255, 255, 255, 0.1); /* Transparent background */
+  border: 2px solid var(--cottage-silver); /* Silver border */
+  backdrop-filter: blur(10px);           /* Glass effect */
+}
+
+/* Floating magnifying glass decoration */
+.floating-magnifier {
+  position: absolute;                /* Position within hero */
+  right: 10%;                       /* Position from right edge */
+  top: 40%;                         /* Position from top */
+  z-index: 4;                       /* Above other content */
+  font-size: 10rem;                  /* Large size */
+  animation: float 4s ease-in-out infinite; /* Floating animation */
+}
+
+/* Magnifying glass icon */
+.magnifier-glass {
+  color: rgba(255, 255, 255, 0.7);  /* Semi-transparent white */
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3)); /* Shadow */
+}
+
+/* Floating animation keyframes */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg); /* Start/end position */
+  }
+  33% { 
+    transform: translateY(-15px) rotate(5deg); /* Float up and rotate */
+  }
+  66% { 
+    transform: translateY(-8px) rotate(-3deg); /* Slight variation */
+  }
+}
+
+/* Fade in up animation for title lines */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;                     /* Start invisible */
+    transform: translateY(30px);    /* Start below */
+  }
+  to {
+    opacity: 1;                     /* End visible */
+    transform: translateY(0);       /* End in position */
+  }
+}
+
+/* Cottage decorations container */
+.cottage-decorations {
+  position: absolute;               /* Position within hero */
+  bottom: var(--space-lg);          /* Distance from bottom */
+  left: 50%;                       /* Center horizontally */
+  transform: translateX(-50%);     /* Perfect centering */
+  z-index: 4;                      /* Above other content */
+}
+
+/* Falling leaves animation */
+.falling-leaves {
+  position: absolute;               /* Position within decorations */
+  top: -100px;                     /* Start above viewport */
+  left: 0;
+  right: 0;
+  pointer-events: none;            /* Don't interfere with clicks */
+}
+
+/* Individual leaf styling */
+.leaf {
+  position: absolute;               /* Individual positioning */
+  font-size: 1.5rem;               /* Leaf size */
+  color: var(--cottage-sage);      /* Sage green color */
+  animation: fall 8s linear infinite; /* Falling animation */
+  opacity: 0.7;                    /* Semi-transparent */
+}
+
+/* Stagger leaf positions and delays */
+.leaf:nth-child(1) {
+  left: 20%;
+  animation-delay: 0s;
+}
+.leaf:nth-child(2) {
+  left: 50%;
+  animation-delay: 2s;
+}
+.leaf:nth-child(3) {
+  left: 80%;
+  animation-delay: 4s;
+}
+
+/* Falling animation for leaves */
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg); /* Start above, no rotation */
+    opacity: 0;                                 /* Start invisible */
+  }
+  10% {
+    opacity: 0.7;                              /* Fade in */
+  }
+  90% {
+    opacity: 0.7;                              /* Stay visible */
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg); /* Fall down, full rotation */
+    opacity: 0;                                 /* Fade out */
+  }
+}
+
+/* Navigation dots for hero section */
+.hero-nav-dots {
+  display: flex;                    /* Horizontal layout */
+  gap: var(--space-sm);             /* Space between dots */
+  justify-content: center;          /* Center the dots */
+  margin-top: var(--space-lg);      /* Space from leaves */
+}
+
+/* Individual navigation dot */
+.dot {
+  width: 12px;                      /* Dot size */
+  height: 12px;
+  border-radius: 50%;               /* Perfect circle */
+  background: rgba(255, 255, 255, 0.5); /* Semi-transparent */
+  cursor: pointer;                  /* Clickable cursor */
+  transition: all var(--transition-normal); /* Smooth changes */
+}
+
+/* Active dot styling */
+.dot.active {
+  background: var(--modern-white);  /* Full white when active */
+  transform: scale(1.2);           /* Slightly larger */
+}
+
+/* Dot hover effect */
+.dot:hover {
+  background: rgba(255, 255, 255, 0.8); /* More opaque on hover */
+}
+
+/* ===== PROBLEMS SECTION ===== */
+/* Section for identifying cottage problems */
+.problems-section {
+  position: relative;               /* For background positioning */
+  padding: var(--space-xxl) 0;     /* Large vertical padding */
+  background: url('/static/images/stone-texture.jpg'); /* Warm cream background */
+  overflow: hidden;                 /* Hide background overflow */
+}
+
+/* Section background with texture */
+.section-background {
+  position: absolute;               /* Cover entire section */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;                    /* Very subtle */
+  z-index: 1;                      /* Behind content */
+}
+
+/* Wood grain texture overlay */
+.texture-overlay.wood-grain {
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      var(--cottage-brown) 0px,
+      var(--cottage-brown) 2px,
+      transparent 2px,
+      transparent 8px
+    );                              /* Simple wood grain pattern */
+  background-size: 20px 20px;      /* Pattern size */
+}
+
+/* Section header styling */
+.section-header {
+  text-align: center;              /* Center align header */
+  margin-bottom: var(--space-xxl);  /* Large space before content */
+  position: relative;              /* Above background */
+  z-index: 2;
+}
+
+/* Section title with cottage styling */
+.section-title {
+  font-family: var(--font-accent);  /* Your Agbalumo font */
+  font-size: clamp(2rem, 6vw, 3.5rem); /* Responsive size */
+  font-weight: 700;                  /* Bold weight */
+  color: var(--text-on-light);       /* Dark text on light backgrounds */
+  margin-bottom: var(--space-md);    /* Space before subtitle */
+  line-height: 1.2;                 /* Tight line height */
+}
+
+/* Cottage-style title with italic emphasis */
+.section-title.cottage-style {
+  font-style: italic;              /* Italic for traditional feel */
+  position: relative;              /* For decorative elements */
+}
+
+/* Decorative underline for cottage-style titles */
+.section-title.cottage-style::after {
+  content: '';                     /* Empty pseudo-element */
+  position: absolute;              /* Position below title */
+  bottom: -var(--space-sm);        /* Distance below text */
+  left: 50%;                      /* Center horizontally */
+  transform: translateX(-50%);    /* Perfect centering */
+  width: 80px;                    /* Underline width */
+  height: 3px;                    /* Underline thickness */
+  background: linear-gradient(90deg, 
+    var(--cottage-brown), 
+    var(--cottage-gold));          /* Gradient underline */
+  border-radius: 2px;             /* Rounded ends */
+}
+
+/* Section subtitle */
+.section-subtitle {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 1.1rem;                  /* Slightly larger than body */
+  color: var(--modern-grey);          /* Grey for secondary text */
+  max-width: 600px;                   /* Limit width */
+  margin: 0 auto;                     /* Center with max-width */
+  line-height: 1.6;                   /* Comfortable reading */
+}
+
+/* Light subtitle variant for dark backgrounds */
+.section-subtitle.light {
+  color: rgba(255, 255, 255, 0.8);   /* Light color for dark backgrounds */
+}
+
+/* Problems grid layout */
+.problems-grid {
+  display: grid;                      /* CSS Grid layout */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+  gap: var(--space-xl);               /* Space between cards */
+  position: relative;                 /* Above background */
+  z-index: 2;
+}
+
+/* Individual problem card */
+.problem-card {
+  background: #ffffff;    /* White background */
+  border-radius: var(--radius-md);    /* Rounded corners */
+  overflow: hidden;                   /* Hide overflow for images */
+  box-shadow: var(--shadow-md);       /* Medium shadow for elevation */
+  transition: all var(--transition-normal); /* Smooth animations */
+  position: relative;                 /* For hover effects */
+}
+
+/* Problem card hover effect */
+.problem-card:hover {
+  transform: translateY(-8px);       /* Lift on hover */
+  box-shadow: var(--shadow-lg);      /* Larger shadow */
+}
+
+/* Card image container */
+.card-image {
+  width: 100%;                       /* Full width */
+  height: 250px;                     /* Fixed height */
+  overflow: hidden;                  /* Hide overflow */
+  position: relative;                /* For image positioning */
+}
+
+/* Card image styling */
+.card-image img {
+  width: 100%;                       /* Full width */
+  height: 100%;                      /* Full height */
+  object-fit: cover;                 /* Cover container while maintaining aspect */
+  transition: transform var(--transition-slow); /* Smooth zoom effect */
+}
+
+/* Image zoom on card hover */
+.problem-card:hover .card-image img {
+  transform: scale(1.05);            /* Slight zoom on hover */
+}
+
+/* Card content area */
+.card-content {
+  padding: var(--space-lg);          /* Generous padding */
+  text-align: center;                /* Center align content */
+}
+
+/* Problem icon styling */
+.problem-icon {
+  width: 60px;                       /* Icon size */
+  height: 60px;
+  border-radius: 50%;                /* Circular icon */
+  display: flex;                     /* Flex for centering */
+  align-items: center;               /* Vertical center */
+  justify-content: center;           /* Horizontal center */
+  font-size: 1.5rem;                 /* Icon font size */
+  margin: 0 auto var(--space-md);    /* Center and add bottom margin */
+  box-shadow: var(--shadow-sm);      /* Subtle shadow */
+}
+
+/* Different icon background colors for blue-silver themes */
+.problem-icon.cottage-wood {
+  background: var(--blue-gradient);       /* Blue gradient for wood theme */
+  color: var(--cottage-white);            /* White icon */
+}
+
+.problem-icon.cottage-nature {
+  background: var(--steel-gradient);      /* Steel gradient for nature theme */
+  color: var(--cottage-white);
+}
+
+.problem-icon.cottage-maintenance {
+  background: var(--silver-gradient);     /* Silver gradient for maintenance */
+  color: var(--cottage-navy);             /* Navy text for contrast */
+}
+
+.problem-icon.cottage-home {
+  background: var(--blue-gradient);       /* Blue gradient for home theme */
+  color: var(--cottage-white);
+}
+
+/* Card title styling */
+.card-title {
+  font-family: var(--font-accent);   /* Elegant font */
+  font-size: 1.5rem;                 /* Large title */
+  font-weight: 600;                  /* Semi-bold */
+  color: var(--cottage-navy);        /* Dark color */
+  margin-bottom: var(--space-sm);    /* Space before severity */
+}
+
+/* Severity indicator */
+.severity {
+  display: inline-block;             /* Inline block for styling */
+  padding: var(--space-xs) var(--space-sm); /* Small padding */
+  border-radius: var(--radius-sm);   /* Rounded corners */
+  font-size: 0.8rem;                 /* Smaller font */
+  font-weight: 600;                  /* Semi-bold */
+  text-transform: uppercase;         /* Uppercase text */
+  letter-spacing: 0.05em;            /* Spaced letters */
+  margin-bottom: var(--space-md);    /* Space before description */
+}
+
+/* Different severity levels with appropriate colors */
+.severity.major {
+  background: rgba(231, 76, 60, 0.1); /* Light red background */
+  color: #e74c3c;                     /* Red text */
+}
+
+.severity.moderate {
+  background: rgba(241, 196, 15, 0.1); /* Light yellow background */
+  color: #f1c40f;                      /* Yellow text */
+}
+
+.severity.minor {
+  background: rgba(46, 204, 113, 0.1); /* Light green background */
+  color: #2ecc71;                      /* Green text */
+}
+
+.severity.comprehensive {
+  background: rgba(52, 152, 219, 0.1); /* Light blue background */
+  color: var(--modern-blue);           /* Blue text */
+}
+
+/* Card description text */
+.card-description {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 0.95rem;                 /* Slightly smaller */
+  color: var(--modern-grey);          /* Grey color */
+  line-height: 1.5;                   /* Comfortable reading */
+}
+
+/* ===== SERVICES SECTION - CLEAN CIRCULAR DESIGN ===== */
+.services-section {
+  position: relative;
+  padding: var(--space-xxl) 0;
+  /* Half wood background - only bottom half */
+  background: 
+    url('/static/images/wall9.jpg'); /* Wood background */
+  background-size: 100% 100%, 100% 100%;
+  background-position: center;
+  color: var(--text-on-light);
+  overflow: hidden;
+}
+
+.services-overlay {
+  position: absolute;               /* Cover entire hero area */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(104, 99, 99, 0.2); /* Semi-transparent navy overlay */
+  z-index: 2;                       /* Above canvas, below content */
+}
+
+/* Keep particles for top half */
+.particles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50%;  /* Only top half */
+  z-index: 1;
+  opacity: 0.1;
+}
+
+/* Services title styling */
+.services-title {
+  color: #ffffff;                /* White text for contrast */
+  text-shadow: 
+    0 0px 4px rgba(0, 0, 0, 0.5);/* Subtle text shadow */
+  letter-spacing: 0.02em;
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  font-family: var(--font-accent);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: var(--space-md);
+}
+
+/* Keep title word animations */
+.title-word {
+  display: inline-block;
+  transition: transform var(--transition-normal);
+}
+
+.services-title:hover .title-word:nth-child(1) {
+  transform: translateY(-5px);
+}
+
+.services-title:hover .title-word:nth-child(2) {
+  transform: translateY(5px);
+}
+
+/* Subtitle styling */
+.section-subtitle.light {
+  color: var(--text-on-light);
+  text-shadow: 
+    0 0px 4px rgba(255, 255, 255, 0.5);/* Subtle text shadow */
+  text-align: center;
+  margin-bottom: var(--space-xxl);
+}
+
+/* Services grid - horizontal layout */
+.services-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-xxl);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+  margin-top: var(--space-xl);
+}
+
+/* Clean circular service cards */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all var(--transition-normal);
+  max-width: 280px;
+}
+
+/* The actual circle - only for image */
+.service-content {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    0 0 0 8px rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+  margin-bottom: var(--space-lg);
+  overflow: hidden;
+}
+
+/* Hover effect for circle */
+.service-card:hover .service-content {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 12px rgba(255, 255, 255, 0.15);
+}
+
+/* Service image inside circle */
+.service-icon {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* Image styling */
+.service-icon .icon-inner {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  transition: transform var(--transition-normal);
+}
+
+/* Service-specific images */
+.ai-inspection .icon-inner {
+  background-image: url('../images/service1.png');
+}
+
+.reports-tracking .icon-inner {
+  background-image: url('../images/service2.png');
+}
+
+.care-guide .icon-inner {
+  background-image: url('../images/service3.png');
+}
+
+/* Image hover effect */
+.service-card:hover .service-icon .icon-inner {
+  transform: scale(1.1);
+}
+
+/* Description box below circle */
+.service-info-box {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-normal);
+  width: 100%;
+  max-width: 280px;
+}
+
+/* Hover effect for info box */
+.service-card:hover .service-info-box {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Title in info box */
+.service-title {
+  font-family: var(--font-accent);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-on-light);
+  line-height: 1.2;
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+/* Description in info box */
+.service-description {
+  font-family: var(--font-secondary);
+  font-size: 0.9rem;
+  color: var(--modern-grey);
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+/* Features in info box */
+.service-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.feature {
+  font-family: var(--font-secondary);
+  font-size: 0.8rem;
+  color: var(--cottage-blue);
+  text-align: center;
+}
+
+/* Hide elements we don't need */
+.icon-pulse,
+.service-background {
+  display: none;
+}
+
+/* Responsive design */
+@media (max-width: 968px) {
+  .services-grid {
+    gap: var(--space-lg);
+  }
+  
+  .service-content {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+  
+  .service-content {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .services-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .service-content {
+    width: 180px;
+    height: 180px;
+    padding: var(--space-md);
+  }
+  
+  .service-icon {
+    width: 60px;
+    height: 90px;
+  }
+  
+  .service-description {
+    font-size: 0.8rem;
+  }
+  
+  .service-title {
+    font-size: 1.1rem;
+  }
+}
+
+
+/* ===== APP SECTION ===== */
+/* Mobile app showcase section */
+.app-section {
+  position: relative;                /* For background effects */
+  padding: var(--space-xxl) 0;      /* Large vertical padding */
+  background: linear-gradient(135deg, 
+    var(--cottage-navy) 0%, 
+    var(--modern-dark) 100%);        /* Dark gradient */
+  color: var(--modern-white);        /* White text */
+  overflow: hidden;                  /* Hide background overflow */
+}
+
+/* App container layout */
+.app-container {
+  display: grid;                     /* CSS Grid layout */
+  grid-template-columns: 1fr 1fr;    /* Two equal columns */
+  gap: var(--space-xxl);             /* Large gap between columns */
+  align-items: center;               /* Vertical center alignment */
+  position: relative;                /* Above background effects */
+  z-index: 2;
+}
+
+/* App content (left column) */
+.app-content {
+  max-width: 500px;                  /* Limit width for readability */
+}
+
+/* App title with special styling */
+.app-title {
+  color: #ffffff;
+  font-family: var(--font-accent);   /* Elegant font */
+  font-size: clamp(2rem, 5vw, 3rem); /* Responsive size */
+  font-weight: 700;                  /* Bold */
+  line-height: 1.2;                  /* Tight line height */
+  align-items: center;
+  margin-bottom: var(--space-lg);    /* Space before description */
+}
+
+/* Accent part of app title */
+.title-accent {
+  color: #ffffff;
+  background: linear-gradient(135deg, 
+    var(--cottage-gold), 
+    var(--modern-blue));             /* Gradient text */
+  -webkit-background-clip: text;     /* Clip background to text */
+  -webkit-text-fill-color: transparent; /* Make text transparent */
+  background-clip: text;             /* Standard property */
+}
+
+/* App description text */
+.app-description {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 1.1rem;                 /* Slightly larger */
+  color: rgba(255, 255, 255, 0.8);   /* Semi-transparent */
+  line-height: 1.6;                  /* Comfortable reading */
+  margin-bottom: var(--space-xl);    /* Space before features */
+}
+
+/* App features list */
+.app-features {
+  display: flex;                     /* Flex layout */
+  flex-direction: column;            /* Vertical stacking */
+  gap: var(--space-md);              /* Space between features */
+  margin-bottom: var(--space-xl);    /* Space before CTA */
+}
+
+/* Individual feature item */
+.feature-item {
+  display: flex;                     /* Flex for icon + text */
+  align-items: center;               /* Vertical center */
+  gap: var(--space-md);              /* Space between icon and text */
+}
+
+/* Feature icon */
+.feature-icon {
+  font-size: 1.5rem;                 /* Large icon */
+  flex-shrink: 0;                    /* Don't shrink */
+}
+
+/* Feature text */
+.feature-text {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 1rem;                   /* Standard size */
+  color: rgba(255, 255, 255, 0.9);   /* Nearly white */
+}
+
+/* App CTA container */
+.app-cta {
+  margin-top: var(--space-xl);       /* Space from features */
+}
+
+/* App mockup (right column) */
+.app-mockup {
+  display: flex;                     /* Flex for centering */
+  justify-content: center;           /* Center horizontally */
+  align-items: center;               /* Center vertically */
+  position: relative;                /* For 3D effects */
+  perspective: 1000px;               /* 3D perspective */
+}
+
+/* 3D phone container */
+.phone-3d {
+  position: relative;                /* For shadow positioning */
+  transform-style: preserve-3d;      /* Preserve 3D transforms */
+  transition: transform var(--transition-slow); /* Smooth rotation */
+}
+
+/* Phone 3D hover effect */
+.phone-3d:hover {
+  transform: rotateY(10deg) rotateX(5deg); /* 3D rotation on hover */
+}
+
+/* Phone frame styling */
+.phone-frame {
+  width: 280px;                      /* Phone width */
+  height: 560px;                     /* Phone height */
+  background: linear-gradient(135deg, 
+    #2c3e50 0%, 
+    #34495e 100%);                   /* Dark gradient frame */
+  border-radius: 40px;               /* Rounded corners */
+  padding: 20px;                     /* Frame thickness */
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),  /* Large shadow */
+    inset 0 2px 8px rgba(255, 255, 255, 0.1); /* Inner highlight */
+  position: relative;                /* For screen positioning */
+}
+
+/* Phone screen */
+.phone-screen {
+  width: 100%;                       /* Fill frame */
+  height: 100%;                      /* Fill frame */
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #f8f9fa 100%);                   /* Light gradient screen */
+  border-radius: 30px;               /* Rounded screen corners */
+  overflow: hidden;                  /* Hide overflow */
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1); /* Inner shadow */
+}
+
+/* App interface container */
+.app-interface {
+  padding: var(--space-lg);          /* Interface padding */
+  height: 100%;                      /* Full screen height */
+  display: flex;                     /* Flex layout */
+  flex-direction: column;            /* Vertical stacking */
+  justify-content: space-between;    /* Space between sections */
+}
+
+/* App header (status bar) */
+.app-header {
+  display: flex;                     /* Flex layout */
+  justify-content: space-between;    /* Space between time and signal */
+  align-items: center;               /* Vertical center */
+  padding-bottom: var(--space-md);   /* Space below header */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border */
+}
+
+/* App time display */
+.app-time {
+  font-family: var(--font-secondary); /* Modern font */
+  font-weight: 600;                  /* Semi-bold */
+  font-size: 0.9rem;                 /* Small size */
+  color: var(--cottage-navy);        /* Dark color */
+}
+
+/* App signal indicator */
+.app-signal {
+  font-size: 1rem;                   /* Signal icon size */
+}
+
+/* App logo section */
+.app-logo-section {
+  text-align: center;                /* Center align */
+  padding: var(--space-xl) 0;        /* Vertical padding */
+}
+
+/* App logo icon */
+.app-logo {
+  font-size: 3rem;                   /* Large logo */
+  margin-bottom: var(--space-md);    /* Space below logo */
+  animation: bounce 2s ease-in-out infinite; /* Bouncing animation */
+}
+
+/* Bouncing animation for app logo */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);        /* Normal position */
+  }
+  50% {
+    transform: translateY(-10px);    /* Bounce up */
+  }
+}
+
+/* App name */
+.app-name {
+  font-family: var(--font-accent);   /* Elegant font */
+  font-size: 1.2rem;                 /* Medium size */
+  font-weight: 700;                  /* Bold */
+  color: var(--cottage-navy);        /* Dark color */
+  margin-bottom: var(--space-xs);    /* Small space below */
+}
+
+/* App tagline */
+.app-tagline {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 0.8rem;                 /* Small size */
+  color: var(--modern-grey);          /* Grey color */
+  text-transform: uppercase;          /* Uppercase */
+  letter-spacing: 0.1em;             /* Spaced letters */
+}
+
+/* App preview section */
+.app-preview {
+  text-align: center;                /* Center align */
+  padding: var(--space-lg) 0;        /* Vertical padding */
+  background: rgba(52, 152, 219, 0.1); /* Light blue background */
+  border-radius: var(--radius-md);   /* Rounded corners */
+  margin: var(--space-lg) 0;         /* Vertical margin */
+}
+
+/* Preview cottage icon */
+.preview-cottage {
+  font-size: 2.5rem;                 /* Large cottage icon */
+  margin-bottom: var(--space-sm);    /* Space below icon */
+  animation: pulse 2s ease-in-out infinite; /* Pulsing animation */
+}
+
+/* Preview text */
+.preview-text {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 0.9rem;                 /* Small size */
+  color: var(--cottage-navy);        /* Dark color */
+  font-style: italic;                /* Italic for emphasis */
+}
+
+/* App actions section */
+.app-actions {
+  display: flex;                     /* Flex layout */
+  flex-direction: column;            /* Vertical stacking */
+  gap: var(--space-sm);              /* Space between buttons */
+}
+
+/* App button styling */
+.app-button {
+  background: linear-gradient(135deg, 
+    var(--modern-blue), 
+    var(--cottage-gold));             /* Gradient background */
+  color: var(--modern-white);         /* White text */
+  border: none;                      /* Remove default border */
+  border-radius: var(--radius-md);   /* Rounded corners */
+  padding: var(--space-md);          /* Generous padding */
+  font-family: var(--font-secondary); /* Modern font */
+  font-weight: 600;                  /* Semi-bold */
+  font-size: 0.9rem;                 /* Slightly smaller */
+  cursor: pointer;                   /* Pointer cursor */
+  transition: all var(--transition-normal); /* Smooth animations */
+  box-shadow: var(--shadow-sm);      /* Subtle shadow */
+}
+
+/* Secondary app button */
+.app-button.secondary {
+  background: rgba(44, 62, 80, 0.1);  /* Light background */
+  color: var(--cottage-navy);         /* Dark text */
+  border: 1px solid rgba(44, 62, 80, 0.2); /* Subtle border */
+}
+
+/* App button hover effect */
+.app-button:hover {
+  transform: translateY(-2px);       /* Slight lift */
+  box-shadow: var(--shadow-md);      /* Larger shadow */
+}
+
+/* Phone shadow effect */
+.phone-shadow {
+  position: absolute;                /* Position below phone */
+  bottom: -30px;                     /* Below phone */
+  left: 50%;                        /* Center horizontally */
+  transform: translateX(-50%);      /* Perfect centering */
+  width: 200px;                     /* Shadow width */
+  height: 20px;                     /* Shadow height */
+  background: radial-gradient(ellipse, 
+    rgba(0, 0, 0, 0.3) 0%, 
+    transparent 70%);                /* Elliptical shadow */
+  border-radius: 50%;               /* Rounded shadow */
+  filter: blur(10px);               /* Blur for realism */
+}
+
+/* ===== FOOTER ===== */
+/* Footer with dark background */
+.footer {
+  background: var(--main-background); /* Your main dark background */
+  color: var(--text-on-dark);         /* Light text on dark */
+  padding: var(--space-xl) 0 var(--space-lg); /* Padding */
+  position: relative;                /* For decorative elements */
+}
+
+/* Footer content layout */
+.footer-content {
+  display: flex;                     /* Flex layout */
+  justify-content: space-between;    /* Space between brand and links */
+  align-items: center;               /* Vertical center */
+  margin-bottom: var(--space-lg);    /* Space before bottom */
+  flex-wrap: wrap;                   /* Wrap on smaller screens */
+  gap: var(--space-lg);              /* Gap when wrapped */
+}
+
+/* Footer brand section */
+.footer-brand {
+  max-width: 300px;                  /* Limit width */
+}
+
+/* Footer brand text */
+.footer-brand p {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 0.9rem;                 /* Small size */
+  color: rgba(247, 243, 233, 0.8);   /* Semi-transparent cream */
+  margin-top: var(--space-sm);       /* Space above */
+  font-style: italic;                /* Italic for elegance */
+}
+
+/* Footer links container */
+.footer-links {
+  display: flex;                     /* Flex layout */
+  gap: var(--space-lg);              /* Space between links */
+  flex-wrap: wrap;                   /* Wrap if needed */
+}
+
+/* Footer link styling */
+.footer-links a {
+  font-family: var(--font-secondary); /* Modern font */
+  color: var(--cottage-cream);       /* Cream color */
+  text-decoration: none;             /* Remove underline */
+  font-size: 0.9rem;                 /* Small size */
+  transition: color var(--transition-normal); /* Smooth color change */
+  position: relative;                /* For hover effect */
+}
+
+/* Footer link hover effect */
+.footer-links a:hover {
+  color: var(--cottage-gold);        /* Gold on hover */
+}
+
+/* Footer link underline effect */
+.footer-links a::after {
+  content: '';                       /* Empty pseudo-element */
+  position: absolute;                /* Position below link */
+  bottom: -2px;                     /* Below text */
+  left: 0;                          /* Start from left */
+  width: 0;                         /* Start with no width */
+  height: 1px;                      /* Thin line */
+  background: var(--cottage-gold);   /* Gold underline */
+  transition: width var(--transition-normal); /* Smooth expansion */
+}
+
+/* Expand underline on hover */
+.footer-links a:hover::after {
+  width: 100%;                      /* Full width on hover */
+}
+
+/* Footer bottom section */
+.footer-bottom {
+  border-top: 1px solid rgba(247, 243, 233, 0.2); /* Subtle top border */
+  padding-top: var(--space-lg);     /* Padding above text */
+  text-align: center;               /* Center align */
+}
+
+/* Footer bottom text */
+.footer-bottom p {
+  font-family: var(--font-secondary); /* Modern font */
+  font-size: 0.8rem;                 /* Small size */
+  color: rgba(247, 243, 233, 0.6);   /* More transparent cream */
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+/* Tablet styles (768px and below) */
+@media (max-width: 768px) {
+  /* Hide desktop navigation, show mobile toggle */
+  .nav-menu {
+    display: none;                   /* Hide menu on mobile */
+  }
+  
+  .mobile-toggle {
+    display: flex;                   /* Show hamburger menu */
+  }
+  
+  /* Adjust hero title size for mobile */
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3rem); /* Smaller on mobile */
+  }
+  
+  /* Stack app container vertically on mobile */
+  .app-container {
+    grid-template-columns: 1fr;      /* Single column */
+    gap: var(--space-xl);            /* Smaller gap */
+    text-align: center;              /* Center align */
+  }
+  
+  /* Adjust phone mockup size for mobile */
+  .phone-frame {
+    width: 240px;                    /* Smaller phone */
+    height: 480px;
+  }
+  
+  /* Smaller magnifying glass on mobile */
+  .floating-magnifier {
+    font-size: 2.5rem;               /* Smaller size */
+    right: 5%;                       /* Closer to edge */
+  }
+  
+  /* Single column for problems grid */
+  .problems-grid {
+    grid-template-columns: 1fr;      /* Single column */
+  }
+  
+  /* Single column for services grid */
+  .services-grid {
+    grid-template-columns: 1fr;      /* Single column */
+  }
+  
+  /* Stack footer content vertically */
+  .footer-content {
+    flex-direction: column;          /* Vertical stacking */
+    text-align: center;              /* Center align */
+  }
+}
+
+/* Small mobile styles (480px and below) */
+@media (max-width: 480px) {
+  /* Reduce container padding on small screens */
+  .container {
+    padding: 0 var(--space-md);      /* Smaller side padding */
+  }
+  
+  /* Adjust section padding for small screens */
+  .problems-section,
+  .services-section,
+  .app-section {
+    padding: var(--space-xl) 0;      /* Smaller vertical padding */
+  }
+  
+  /* Smaller service card padding */
+  .service-card {
+    padding: var(--space-lg);        /* Smaller padding */
+  }
+  
+  /* Smaller phone mockup for very small screens */
+  .phone-frame {
+    width: 200px;                    /* Even smaller */
+    height: 400px;
+  }
+  
+  /* Hide floating elements on very small screens */
+  .falling-leaves {
+    display: none;                   /* Hide leaves animation */
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+/* Utility classes for common styling needs */
+
+/* Text alignment utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+/* Spacing utilities */
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+
+/* Display utilities */
+.hidden { display: none; }
+.visible { display: block; }
+
+/* Color utilities */
+.text-cottage-brown { color: var(--cottage-brown); }
+.text-cottage-sage { color: var(--cottage-sage); }
+.text-modern-blue { color: var(--modern-blue); }
+
+/* ===== ACCESSIBILITY ===== */
+/* Focus styles for keyboard navigation */
+.cta-button:focus,
+.nav-link:focus,
+.app-button:focus {
+  outline: 2px solid var(--cottage-gold); /* Gold focus outline */
+  outline-offset: 2px;                    /* Space from element */
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.3); /* Focus glow */
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable animations for accessibility */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Keep essential transforms but remove animations */
+  .floating-magnifier {
+    animation: none;                 /* Remove float animation */
+  }
+  
+  .falling-leaves {
+    display: none;                   /* Hide animated leaves */
+  }
+}
+
+/* ===== MOBILE MENU STYLES ===== */
+/* Add these styles to your static/css/style.css file */
+
+/* Mobile navigation styles */
+@media (max-width: 768px) {
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--cottage-white);
+        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+        transition: right var(--transition-normal);
+        z-index: 1001;
+        padding-top: 80px;
+    }
+    
+    .nav-menu.mobile-open {
+        right: 0;
+    }
+    
+    .nav-menu ul {
+        flex-direction: column;
+        padding: var(--space-lg);
+        gap: var(--space-md);
+    }
+    
+    .nav-link {
+        display: block;
+        padding: var(--space-md);
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-normal);
+    }
+    
+    .nav-link:hover,
+    .nav-link.active {
+        background: var(--cottage-cream);
+        color: var(--cottage-blue);
+    }
+    
+    .mobile-toggle {
+        display: flex !important;
+        z-index: 1002;
+    }
+    
+    .mobile-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .mobile-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+}
+
+/* Body scroll lock when menu is open */
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Mobile menu overlay */
+.nav-menu.mobile-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+/* ===== LOADING STATES ===== */
+.loading-state {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: var(--space-sm);
+}
+
+/* ===== NOTIFICATIONS ===== */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 500px;
+    background: var(--cottage-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all var(--transition-normal);
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    padding: var(--space-md);
+    gap: var(--space-sm);
+}
+
+.notification-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.notification-message {
+    flex: 1;
+    font-family: var(--font-secondary);
+    color: var(--text-on-light);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--modern-grey);
+    padding: 0;
+    margin-left: var(--space-sm);
+}
+
+.notification-close:hover {
+    color: var(--text-on-light);
+}
+
+/* Notification types */
+.notification-success {
+    border-left: 4px solid #28a745;
+}
+
+.notification-error {
+    border-left: 4px solid #dc3545;
+}
+
+.notification-warning {
+    border-left: 4px solid #ffc107;
+}
+
+.notification-info {
+    border-left: 4px solid var(--cottage-blue);
+}
+
+/* ===== ANIMATION CLASSES ===== */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+}
+
+.animate-on-scroll.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger animations */
+.animate-on-scroll[data-delay="100"] { transition-delay: 0.1s; }
+.animate-on-scroll[data-delay="200"] { transition-delay: 0.2s; }
+.animate-on-scroll[data-delay="300"] { transition-delay: 0.3s; }
+.animate-on-scroll[data-delay="400"] { transition-delay: 0.4s; }
+.animate-on-scroll[data-delay="500"] { transition-delay: 0.5s; }

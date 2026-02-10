@@ -1,0 +1,890 @@
+{% extends "base.html" %}
+
+{% block title %}User Guide - HomeCheck AI Inspection{% endblock %}
+
+{% block body_class %}guide-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inspect.css') }}">
+    <style>
+        .guide-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-xxl) var(--space-lg);
+        }
+
+        .guide-header {
+            text-align: center;
+            padding: var(--space-xxl) 0;
+            background: linear-gradient(135deg, var(--cottage-white) 0%, rgba(74, 144, 164, 0.05) 100%);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-xxl);
+        }
+
+        .guide-title {
+            font-family: var(--font-accent);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--text-on-light);
+            margin-bottom: var(--space-md);
+        }
+
+        .guide-nav {
+            background: var(--cottage-white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .nav-title {
+            font-weight: bold;
+            color: var(--cottage-blue);
+            margin-bottom: var(--space-md);
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-sm);
+        }
+
+        .nav-link {
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(74, 144, 164, 0.05);
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-on-light);
+            font-size: 0.9rem;
+            transition: all var(--transition-normal);
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(74, 144, 164, 0.1);
+            border-left-color: var(--cottage-blue);
+            transform: translateX(5px);
+        }
+
+        .guide-section {
+            background: var(--cottage-white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--cottage-blue);
+        }
+
+        .section-header {
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 2px solid rgba(74, 144, 164, 0.1);
+        }
+
+        .section-title {
+            font-family: var(--font-accent);
+            font-size: 2rem;
+            color: var(--text-on-light);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .section-subtitle {
+            color: var(--modern-grey);
+            font-size: 1.1rem;
+        }
+
+        .step-grid {
+            display: grid;
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-lg);
+            background: rgba(74, 144, 164, 0.02);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--cottage-blue);
+        }
+
+        .step-number {
+            background: var(--cottage-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .step-content h4 {
+            color: var(--cottage-blue);
+            margin-bottom: var(--space-sm);
+            font-size: 1.2rem;
+        }
+
+        .issue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .issue-card {
+            background: rgba(40, 167, 69, 0.05);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            transition: transform var(--transition-normal);
+        }
+
+        .issue-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .issue-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .issue-icon {
+            font-size: 2rem;
+        }
+
+        .issue-title {
+            color: var(--text-on-light);
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .severity-badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .severity-badge.normal { background: #28a745; color: white; }
+        .severity-badge.minor { background: #ffc107; color: #212529; }
+        .severity-badge.major { background: #dc3545; color: white; }
+
+        .photo-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .photo-example {
+            text-align: center;
+        }
+
+        .example-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            margin-bottom: var(--space-md);
+        }
+
+        .example-label {
+            font-weight: bold;
+            color: var(--text-on-light);
+            margin-bottom: var(--space-xs);
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .tip-card {
+            background: rgba(40, 167, 69, 0.05);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            border-left: 4px solid #28a745;
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .tip-card h4 {
+            color: #28a745;
+            margin-bottom: var(--space-sm);
+        }
+
+        .troubleshooting-item {
+            background: rgba(255, 193, 7, 0.05);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+        }
+
+        .problem-title {
+            color: #ffc107;
+            font-weight: bold;
+            margin-bottom: var(--space-sm);
+        }
+
+        .solution {
+            color: var(--text-on-light);
+        }
+
+        .faq-item {
+            background: rgba(74, 144, 164, 0.05);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-md);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .faq-item:hover {
+            background: rgba(74, 144, 164, 0.1);
+        }
+
+        .faq-question {
+            font-weight: bold;
+            color: var(--cottage-blue);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .faq-answer {
+            color: var(--text-on-light);
+            display: none;
+            padding-top: var(--space-sm);
+            border-top: 1px solid rgba(74, 144, 164, 0.2);
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--cottage-blue), var(--cottage-steel));
+            color: white;
+            padding: var(--space-xxl);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin-top: var(--space-xxl);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--space-lg);
+        }
+
+        @media (max-width: 768px) {
+            .guide-container {
+                padding: var(--space-xl) var(--space-md);
+            }
+            
+            .nav-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .issue-grid, .photo-examples, .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="guide-container">
+        <!-- Guide Header -->
+        <section class="guide-header" data-aos="fade-up">
+            <h1 class="guide-title">📖 User Guide</h1>
+            <p style="font-size: 1.2rem; color: var(--modern-grey);">
+                Master your HomeCheck AI inspection system
+            </p>
+        </section>
+
+        <!-- Quick Navigation -->
+        <nav class="guide-nav" data-aos="fade-up" data-aos-delay="100">
+            <div class="nav-title">📋 Quick Navigation</div>
+            <div class="nav-links">
+                <a href="#getting-started" class="nav-link">🚀 Getting Started</a>
+                <a href="#photo-tips" class="nav-link">📸 Photo Tips</a>
+                <a href="#issue-types" class="nav-link">🔍 Issue Types</a>
+                <a href="#interpreting-results" class="nav-link">📊 Understanding Results</a>
+                <a href="#maintenance" class="nav-link">🔧 Maintenance</a>
+                <a href="#troubleshooting" class="nav-link">🛠️ Troubleshooting</a>
+                <a href="#faq" class="nav-link">❓ FAQ</a>
+            </div>
+        </nav>
+
+        <!-- Getting Started Section -->
+        <section id="getting-started" class="guide-section" data-aos="fade-up" data-aos-delay="200">
+            <div class="section-header">
+                <h2 class="section-title">🚀 Getting Started</h2>
+                <p class="section-subtitle">Learn how to perform your first AI-powered home inspection</p>
+            </div>
+
+            <div class="step-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Access the Inspection Tool</h4>
+                        <p>Navigate to the AI Inspection page and choose between uploading an existing photo or using your device's camera to capture a new image.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Capture or Upload Your Image</h4>
+                        <p>Take a clear, well-lit photo of the area you want to inspect. Ensure the target area fills most of the frame for best results.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>AI Analysis</h4>
+                        <p>Our AI model will analyze your image in seconds, detecting potential issues like cracks, peeling, algae, or other structural concerns.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Review Results</h4>
+                        <p>Get instant detection results with detailed reports, repair recommendations, and maintenance guidance tailored to your findings.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Take Action</h4>
+                        <p>Follow the recommended actions, contact professionals if needed, or set up maintenance reminders based on your inspection results.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Tips Section -->
+        <section id="photo-tips" class="guide-section" data-aos="fade-up" data-aos-delay="300">
+            <div class="section-header">
+                <h2 class="section-title">📸 Photography Best Practices</h2>
+                <p class="section-subtitle">Optimize your photos for accurate AI analysis</p>
+            </div>
+
+            <div class="photo-examples">
+                <div class="photo-example">
+                    <div class="example-image">✅</div>
+                    <div class="example-label">Good: Clear & Focused</div>
+                    <p>High contrast, sharp focus, good lighting</p>
+                </div>
+
+                <div class="photo-example">
+                    <div class="example-image">✅</div>
+                    <div class="example-label">Good: Proper Distance</div>
+                    <p>Target area fills 60-80% of frame</p>
+                </div>
+
+                <div class="photo-example">
+                    <div class="example-image">❌</div>
+                    <div class="example-label">Avoid: Too Dark</div>
+                    <p>Insufficient lighting hinders analysis</p>
+                </div>
+
+                <div class="photo-example">
+                    <div class="example-image">❌</div>
+                    <div class="example-label">Avoid: Too Distant</div>
+                    <p>Target area too small in frame</p>
+                </div>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">☀️</div>
+                    <h4>Optimal Lighting</h4>
+                    <p>Use natural daylight when possible. Avoid harsh shadows or overly bright spots that could obscure details.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🎯</div>
+                    <h4>Focus on the Issue</h4>
+                    <p>Center the suspected problem area in your frame. The AI works best when the issue is clearly visible and prominent.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">📐</div>
+                    <h4>Straight Angles</h4>
+                    <p>Hold your camera straight and perpendicular to the surface for the most accurate analysis results.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🔍</div>
+                    <h4>Multiple Angles</h4>
+                    <p>For complex issues, take photos from different angles to get a comprehensive view of the problem.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Issue Types Section -->
+        <section id="issue-types" class="guide-section" data-aos="fade-up" data-aos-delay="400">
+            <div class="section-header">
+                <h2 class="section-title">🔍 What Our AI Can Detect</h2>
+                <p class="section-subtitle">Understanding the different types of issues our system identifies</p>
+            </div>
+
+            <div class="issue-grid">
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">🟢</div>
+                        <div class="issue-title">Normal</div>
+                        <span class="severity-badge normal">Healthy</span>
+                    </div>
+                    <p><strong>What it means:</strong> No structural issues detected. Your home appears to be in good condition.</p>
+                    <p><strong>Action:</strong> Continue regular maintenance routine and schedule next inspection in 6-12 months.</p>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">🟡</div>
+                        <div class="issue-title">Minor Crack</div>
+                        <span class="severity-badge minor">Minor</span>
+                    </div>
+                    <p><strong>What it means:</strong> Small cracks that should be monitored and sealed to prevent expansion.</p>
+                    <p><strong>Action:</strong> Seal cracks, monitor for growth, address underlying causes like drainage issues.</p>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">🔴</div>
+                        <div class="issue-title">Major Crack</div>
+                        <span class="severity-badge major">Critical</span>
+                    </div>
+                    <p><strong>What it means:</strong> Significant structural damage that requires immediate professional attention.</p>
+                    <p><strong>Action:</strong> Contact a structural engineer immediately. Do not delay repairs.</p>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">🟠</div>
+                        <div class="issue-title">Peeling</div>
+                        <span class="severity-badge minor">Minor</span>
+                    </div>
+                    <p><strong>What it means:</strong> Paint deterioration affecting both protection and aesthetics.</p>
+                    <p><strong>Action:</strong> Schedule repainting with proper surface preparation to prevent further deterioration.</p>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">🟡</div>
+                        <div class="issue-title">Algae</div>
+                        <span class="severity-badge minor">Minor</span>
+                    </div>
+                    <p><strong>What it means:</strong> Moisture-related growth that can indicate drainage or ventilation issues.</p>
+                    <p><strong>Action:</strong> Clean affected areas, improve drainage, increase air circulation.</p>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">🟠</div>
+                        <div class="issue-title">Spalling</div>
+                        <span class="severity-badge major">Major</span>
+                    </div>
+                    <p><strong>What it means:</strong> Concrete or masonry deterioration that requires professional repair.</p>
+                    <p><strong>Action:</strong> Contact a mason or concrete contractor to prevent further structural damage.</p>
+                </div>
+
+                <div class="issue-card">
+                    <div class="issue-header">
+                        <div class="issue-icon">🟡</div>
+                        <div class="issue-title">Stain</div>
+                        <span class="severity-badge minor">Minor</span>
+                    </div>
+                    <p><strong>What it means:</strong> Surface discoloration that may indicate underlying moisture or contamination.</p>
+                    <p><strong>Action:</strong> Investigate source, clean appropriately, address root cause if needed.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interpreting Results -->
+        <section id="interpreting-results" class="guide-section" data-aos="fade-up" data-aos-delay="500">
+            <div class="section-header">
+                <h2 class="section-title">📊 Understanding Your Results</h2>
+                <p class="section-subtitle">How to read and act on your AI inspection reports</p>
+            </div>
+
+            <div class="step-grid">
+                <div class="step-card">
+                    <div class="step-number">🎯</div>
+                    <div class="step-content">
+                        <h4>AI Detection Result</h4>
+                        <p>The main finding shows what our AI detected in your image. This is the primary issue type that requires your attention.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">📋</div>
+                    <div class="step-content">
+                        <h4>Detailed Report</h4>
+                        <p>Click "View Detailed Report" to access comprehensive repair instructions, cost estimates, and professional recommendations.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">📧</div>
+                    <div class="step-content">
+                        <h4>Professional Contact</h4>
+                        <p>For issues requiring professional help, use our email template generator to contact qualified contractors with your inspection details.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">📊</div>
+                    <div class="step-content">
+                        <h4>History Tracking</h4>
+                        <p>All your inspections are saved in your history. Track improvements and monitor recurring issues over time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Maintenance Tips -->
+        <section id="maintenance" class="guide-section" data-aos="fade-up" data-aos-delay="600">
+            <div class="section-header">
+                <h2 class="section-title">🔧 Preventive Maintenance</h2>
+                <p class="section-subtitle">Keep your home healthy with regular care</p>
+            </div>
+
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-icon">📅</div>
+                    <h4>Regular Inspections</h4>
+                    <p>Perform AI inspections monthly during spring and fall, and after severe weather events.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🚰</div>
+                    <h4>Drainage Management</h4>
+                    <p>Ensure gutters are clean and water flows away from your foundation to prevent moisture issues.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🌿</div>
+                    <h4>Vegetation Control</h4>
+                    <p>Trim plants and trees away from your home's exterior to improve air circulation and reduce moisture.</p>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-icon">🎨</div>
+                    <h4>Protective Coatings</h4>
+                    <p>Maintain paint and sealants to protect surfaces from weather and prevent deterioration.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section id="troubleshooting" class="guide-section" data-aos="fade-up" data-aos-delay="700">
+            <div class="section-header">
+                <h2 class="section-title">🛠️ Troubleshooting</h2>
+                <p class="section-subtitle">Common issues and solutions</p>
+            </div>
+
+            <div class="troubleshooting-item">
+                <div class="problem-title">❌ Image Upload Failed</div>
+                <div class="solution">
+                    <strong>Solutions:</strong>
+                    <ul>
+                        <li>Check your internet connection</li>
+                        <li>Ensure image is under 10MB</li>
+                        <li>Try a different image format (JPG, PNG, GIF)</li>
+                        <li>Refresh the page and try again</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="troubleshooting-item">
+                <div class="problem-title">❌ Camera Not Working</div>
+                <div class="solution">
+                    <strong>Solutions:</strong>
+                    <ul>
+                        <li>Grant camera permissions in your browser</li>
+                        <li>Check if another app is using the camera</li>
+                        <li>Try uploading an image instead</li>
+                        <li>Restart your browser or device</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="troubleshooting-item">
+                <div class="problem-title">❌ Unexpected Results</div>
+                <div class="solution">
+                    <strong>Solutions:</strong>
+                    <ul>
+                        <li>Retake photo with better lighting</li>
+                        <li>Ensure the issue area is clearly visible</li>
+                        <li>Try different angles or distances</li>
+                        <li>Clean the camera lens</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="guide-section" data-aos="fade-up" data-aos-delay="800">
+            <div class="section-header">
+                <h2 class="section-title">❓ Frequently Asked Questions</h2>
+                <p class="section-subtitle">Quick answers to common questions</p>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    How accurate is the AI detection?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Our AI model achieves 95% accuracy in detecting structural issues. It's trained on thousands of home images and continuously improves with new data.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    Can I use this for insurance claims?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Our AI reports provide valuable documentation, but we recommend getting professional verification for insurance claims and legal purposes.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    How often should I inspect my home?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    We recommend monthly visual inspections and AI analysis every 6-12 months, or immediately after severe weather events.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    What if I disagree with the AI result?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Try retaking the photo with better lighting or angle. If concerns persist, consult a professional inspector for a second opinion.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    Is my data secure?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Yes, we use secure storage and never share your images or inspection data with third parties. You control your data completely.
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFAQ(this)">
+                <div class="faq-question">
+                    Can I delete my inspection history?
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Absolutely! You can delete individual reports or clear your entire history from the History page at any time.
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section" data-aos="fade-up" data-aos-delay="900">
+            <h3>Ready to Start Your First AI Inspection?</h3>
+            <p>Put your knowledge to practice and discover what our AI can detect in your home.</p>
+            
+            <div class="cta-buttons">
+                <a href="{{ url_for('inspection') }}" class="cta-button primary">
+                    <span class="button-text">🚀 Start AI Inspection</span>
+                </a>
+                <a href="{{ url_for('about') }}" class="cta-button secondary">
+                    <span class="button-text">📖 Learn About Us</span>
+                </a>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        // FAQ Toggle Functionality
+        function toggleFAQ(element) {
+            const answer = element.querySelector('.faq-answer');
+            const icon = element.querySelector('.faq-question span');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-answer.active').forEach(faq => {
+                if (faq !== answer) {
+                    faq.classList.remove('active');
+                    faq.parentElement.querySelector('.faq-question span').textContent = '+';
+                }
+            });
+            
+            // Toggle current FAQ
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+                icon.textContent = '+';
+            } else {
+                answer.classList.add('active');
+                icon.textContent = '−';
+            }
+        }
+
+        // Smooth scroll navigation
+        function initSmoothScrolling() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        // Remove active from all nav links
+                        document.querySelectorAll('.nav-link').forEach(navLink => {
+                            navLink.classList.remove('active');
+                        });
+                        
+                        // Add active to clicked link
+                        this.classList.add('active');
+                        
+                        // Smooth scroll to section
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Active section tracking
+        function initActiveTracking() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const sectionId = '#' + entry.target.id;
+                        
+                        // Remove active from all nav links
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        
+                        // Add active to corresponding nav link
+                        const activeLink = document.querySelector(`a[href="${sectionId}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.3,
+                rootMargin: '-100px 0px -100px 0px'
+            });
+
+            // Observe all guide sections
+            document.querySelectorAll('.guide-section[id]').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📖 User Guide page loaded');
+            
+            initSmoothScrolling();
+            initActiveTracking();
+            
+            // Add loading animation to step cards
+            const stepCards = document.querySelectorAll('.step-card');
+            stepCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+            
+            console.log('✨ Guide page interactions initialized');
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Press 'G' to go to top
+            if (e.key.toLowerCase() === 'g') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // Press 'S' to start inspection
+            if (e.key.toLowerCase() === 's') {
+                window.location.href = "{{ url_for('inspection') }}";
+            }
+        });
+
+        // Print friendly styles
+        if (window.matchMedia) {
+            const mediaQuery = window.matchMedia('print');
+            mediaQuery.addListener(function(mq) {
+                if (mq.matches) {
+                    // Expand all FAQ answers for printing
+                    document.querySelectorAll('.faq-answer').forEach(answer => {
+                        answer.classList.add('active');
+                    });
+                }
+            });
+        }
+
+        console.log('📖 User Guide fully initialized with all interactive features');
+    </script>
+{% endblock %}

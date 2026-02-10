@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic HTML5 setup -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect - CottageCheck Home Inspection</title>
+    
+    <!-- Preload your custom fonts for performance -->
+    <link rel="preload" href="fonts/YourCottageFont.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/YourModernFont.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Google Fonts as fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Animation Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS files -->
+    <link rel="stylesheet" href="css/style.css">      <!-- Shared styles -->
+    <link rel="stylesheet" href="css/inspect.css">    <!-- Page-specific styles -->
+    
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body class="inspect-page">
+    
+    <!-- ===== SHARED HEADER NAVIGATION ===== -->
+    <!-- This header will be the same across all pages -->
+    <header class="header" id="header">
+        <div class="nav-container">
+            <!-- Logo links back to home -->
+            <a href="index.html" class="logo">
+                <span class="logo-cottage">Cottage</span><span class="logo-check">Check</span>
+            </a>
+            
+            <!-- Main navigation menu -->
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="inspect.html" class="nav-link active">Inspect</a></li>
+                    <li><a href="history.html" class="nav-link">History</a></li>
+                    <li><a href="guide.html" class="nav-link">Guide</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile menu toggle -->
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== PAGE HERO SECTION ===== -->
+    <!-- Smaller hero for internal pages -->
+    <section class="page-hero inspect-hero">
+        <div class="page-hero-content">
+            <h1 class="page-title" data-aos="fade-up">
+                🤖 AI Cottage Inspection
+            </h1>
+            <p class="page-subtitle" data-aos="fade-up" data-aos-delay="200">
+                Upload or capture images for instant AI-powered analysis
+            </p>
+        </div>
+        
+        <!-- Floating inspection tools -->
+        <div class="floating-tools" data-aos="zoom-in" data-aos-delay="400">
+            <div class="tool">🤖</div>
+            <div class="tool">📸</div>
+            <div class="tool">📊</div>
+        </div>
+    </section>
+
+    <!-- ===== AI INSPECTION INTERFACE ===== -->
+    <section class="ai-inspection-section">
+        <div class="container">
+            <div class="inspection-container">
+                
+                <!-- Method Selection -->
+                <div class="method-selector" data-aos="fade-up">
+                    <button class="method-btn active" onclick="switchMethod('upload')">
+                        📁 Upload Image
+                    </button>
+                    <button class="method-btn" onclick="switchMethod('camera')">
+                        📸 Use Camera
+                    </button>
+                </div>
+                
+                <!-- Upload Section -->
+                <div class="upload-section active" data-aos="fade-up" data-aos-delay="200">
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()" 
+                         ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="handleDragLeave(event)">
+                        <div class="upload-icon">📤</div>
+                        <h3>Click to upload or drag and drop</h3>
+                        <p>Supports: JPG, PNG, GIF (Max 10MB)</p>
+                        <p class="ai-note">🤖 AI will analyze your cottage image instantly</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(this)">
+                    </div>
+                </div>
+                
+                <!-- Camera Section -->
+                <div class="camera-section" data-aos="fade-up" data-aos-delay="200">
+                    <div class="camera-container">
+                        <video id="video" class="camera-view" width="640" height="480" autoplay style="display: none;"></video>
+                        <canvas id="canvas" class="camera-view" width="640" height="480" style="display: none;"></canvas>
+                        
+                        <div class="camera-controls">
+                            <button class="cta-button primary" onclick="startCamera()" id="startBtn">
+                                <span class="button-text">📹 Start Camera</span>
+                            </button>
+                            <button class="cta-button primary" onclick="captureImage()" id="captureBtn" style="display: none;">
+                                <span class="button-text">📸 Capture</span>
+                            </button>
+                            <button class="cta-button secondary" onclick="retakeImage()" id="retakeBtn" style="display: none;">
+                                <span class="button-text">🔄 Retake</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preview Section -->
+                <div class="preview-container" id="previewContainer" style="display: none;" data-aos="fade-up">
+                    <h3>📸 Image Preview:</h3>
+                    <img id="previewImage" class="preview-image" alt="Preview">
+                    <div class="preview-actions">
+                        <button class="cta-button primary" onclick="analyzeImage()">
+                            <span class="button-text">🤖 Analyze with AI</span>
+                            <span class="button-icon">⚡</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Loading Section -->
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="ai-loading">
+                        <div class="spinner"></div>
+                        <div class="loading-brain">🧠</div>
+                    </div>
+                    <h3>🤖 AI is analyzing your cottage...</h3>
+                    <p>Our machine learning model is detecting structural issues</p>
+                    <div class="loading-steps">
+                        <div class="step active">📸 Processing image...</div>
+                        <div class="step">🔍 Detecting features...</div>
+                        <div class="step">🧠 AI analysis...</div>
+                        <div class="step">📊 Generating results...</div>
+                    </div>
+                </div>
+                
+                <!-- AI Prediction Results -->
+                <div class="prediction-section" id="predictionSection" style="display: none;">
+                    <div id="predictionResults"></div>
+                    
+                    <div class="action-buttons">
+                        <a href="#" class="cta-button primary" onclick="viewFullReport()" id="reportBtn">
+                            <span class="button-text">📋 View Full Report</span>
+                        </a>
+                        <button class="cta-button secondary" onclick="resetInspection()">
+                            <span class="button-text">🔄 New Inspection</span>
+                        </button>
+                        <a href="history.html" class="cta-button secondary">
+                            <span class="button-text">📊 View History</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SHARED FOOTER ===== -->
+    <!-- This footer will be the same across all pages -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-cottage">Cottage</span><span class="logo-check">Check</span>
+                    <p>Preserving cottage heritage with modern care</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="inspect.html">Inspect</a>
+                    <a href="history.html">History</a>
+                    <a href="guide.html">Guide</a>
+                    <a href="about.html">About</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CottageCheck. Crafted with care for cottage owners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT LIBRARIES ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic HTML5 setup -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect - CottageCheck AI Inspection</title>
+    
+    <!-- Preload your custom fonts for performance -->
+    <link rel="preload" href="fonts/agbalumo-regular.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Google Fonts as fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Animation Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS files -->
+    <link rel="stylesheet" href="css/style.css">      <!-- Shared styles -->
+    <link rel="stylesheet" href="css/inspect.css">    <!-- Page-specific styles -->
+    
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body class="inspect-page">
+    
+    <!-- ===== SHARED HEADER NAVIGATION ===== -->
+    <header class="header" id="header">
+        <div class="nav-container">
+            <!-- Logo links back to home -->
+            <a href="index.html" class="logo">
+                <span class="logo-cottage">Cottage</span><span class="logo-check">Check</span>
+            </a>
+            
+            <!-- Main navigation menu -->
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="inspect.html" class="nav-link active">Inspect</a></li>
+                    <li><a href="history.html" class="nav-link">History</a></li>
+                    <li><a href="guide.html" class="nav-link">Guide</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile menu toggle -->
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== PAGE HERO SECTION ===== -->
+    <section class="page-hero inspect-hero">
+        <div class="page-hero-content">
+            <h1 class="page-title" data-aos="fade-up">
+                🤖 AI Cottage Inspection
+            </h1>
+            <p class="page-subtitle" data-aos="fade-up" data-aos-delay="200">
+                Upload or capture images for instant AI-powered analysis
+            </p>
+        </div>
+        
+        <!-- Floating inspection tools -->
+        <div class="floating-tools" data-aos="zoom-in" data-aos-delay="400">
+            <div class="tool">🤖</div>
+            <div class="tool">📸</div>
+            <div class="tool">📊</div>
+        </div>
+    </section>
+
+    <!-- ===== AI INSPECTION INTERFACE ===== -->
+    <section class="ai-inspection-section">
+        <div class="container">
+            <div class="inspection-container">
+                
+                <!-- Method Selection -->
+                <div class="method-selector" data-aos="fade-up">
+                    <button class="method-btn active" onclick="switchMethod('upload')">
+                        📁 Upload Image
+                    </button>
+                    <button class="method-btn" onclick="switchMethod('camera')">
+                        📸 Use Camera
+                    </button>
+                </div>
+                
+                <!-- Upload Section -->
+                <div class="upload-section active" data-aos="fade-up" data-aos-delay="200">
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()" 
+                         ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="handleDragLeave(event)">
+                        <div class="upload-icon">📤</div>
+                        <h3>Click to upload or drag and drop</h3>
+                        <p>Supports: JPG, PNG, GIF (Max 10MB)</p>
+                        <p class="ai-note">🤖 AI will analyze your cottage image instantly</p>
+                        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(this)">
+                    </div>
+                </div>
+                
+                <!-- Camera Section -->
+                <div class="camera-section" data-aos="fade-up" data-aos-delay="200">
+                    <div class="camera-container">
+                        <video id="video" class="camera-view" width="640" height="480" autoplay style="display: none;"></video>
+                        <canvas id="canvas" class="camera-view" width="640" height="480" style="display: none;"></canvas>
+                        
+                        <div class="camera-controls">
+                            <button class="cta-button primary" onclick="startCamera()" id="startBtn">
+                                <span class="button-text">📹 Start Camera</span>
+                            </button>
+                            <button class="cta-button primary" onclick="captureImage()" id="captureBtn" style="display: none;">
+                                <span class="button-text">📸 Capture</span>
+                            </button>
+                            <button class="cta-button secondary" onclick="retakeImage()" id="retakeBtn" style="display: none;">
+                                <span class="button-text">🔄 Retake</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preview Section -->
+                <div class="preview-container" id="previewContainer" style="display: none;" data-aos="fade-up">
+                    <h3>📸 Image Preview:</h3>
+                    <img id="previewImage" class="preview-image" alt="Preview">
+                    <div class="preview-actions">
+                        <button class="cta-button primary" onclick="analyzeImage()">
+                            <span class="button-text">🤖 Analyze with AI</span>
+                            <span class="button-icon">⚡</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Loading Section -->
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="ai-loading">
+                        <div class="spinner"></div>
+                        <div class="loading-brain">🧠</div>
+                    </div>
+                    <h3>🤖 AI is analyzing your cottage...</h3>
+                    <p>Our machine learning model is detecting structural issues</p>
+                    <div class="loading-steps">
+                        <div class="step active">📸 Processing image...</div>
+                        <div class="step">🔍 Detecting features...</div>
+                        <div class="step">🧠 AI analysis...</div>
+                        <div class="step">📊 Generating results...</div>
+                    </div>
+                </div>
+                
+                <!-- AI Prediction Results -->
+                <div class="prediction-section" id="predictionSection" style="display: none;">
+                    <div id="predictionResults"></div>
+                    
+                    <div class="action-buttons">
+                        <button class="cta-button primary" onclick="saveToHistory()">
+                            <span class="button-text">💾 Save to History</span>
+                        </button>
+                        <button class="cta-button secondary" onclick="resetInspection()">
+                            <span class="button-text">🔄 New Inspection</span>
+                        </button>
+                        <a href="history.html" class="cta-button secondary">
+                            <span class="button-text">📊 View History</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SHARED FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-cottage">Cottage</span><span class="logo-check">Check</span>
+                    <p>Preserving cottage heritage with modern AI technology</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="inspect.html">Inspect</a>
+                    <a href="history.html">History</a>
+                    <a href="guide.html">Guide</a>
+                    <a href="about.html">About</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CottageCheck. Powered by AI for cottage owners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT LIBRARIES ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    
+    <!-- Inspection AI Functionality -->
+    <script>
+        let currentImageData = null;
+        let stream = null;
+        let analysisInProgress = false;
+        let lastPredictionResult = null;
+
+        // ===== METHOD SWITCHING =====
+        function switchMethod(method) {
+            // Update button states
+            document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide sections with animation
+            document.querySelectorAll('.upload-section, .camera-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelector(`.${method}-section`).classList.add('active');
+            
+            // Stop camera if switching away
+            if (method !== 'camera' && stream) {
+                stopCamera();
+            }
+            
+            resetInspection();
+            console.log(`🔄 Switched to ${method} method`);
+        }
+
+        // ===== DRAG AND DROP HANDLING =====
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect({files: files});
+            }
+        }
+
+        // ===== FILE HANDLING =====
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('⚠️ Please select an image file (JPG, PNG, GIF)');
+                    return;
+                }
+                
+                // Validate file size (10MB limit)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('⚠️ File size too large. Please select an image under 10MB.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    showPreview(e.target.result);
+                    currentImageData = file;
+                    console.log('📁 File loaded successfully:', file.name);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // ===== CAMERA FUNCTIONALITY =====
+        async function startCamera() {
+            try {
+                console.log('📹 Requesting camera access...');
+                
+                // Request camera with preferred settings
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: {
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'environment'  // Use rear camera if available
+                    }
+                });
+                
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                video.style.display = 'block';
+                
+                // Update button states
+                document.getElementById('startBtn').style.display = 'none';
+                document.getElementById('captureBtn').style.display = 'inline-flex';
+
+                console.log('✅ Camera started successfully');
+                
+            } catch (err) {
+                console.error('❌ Camera error:', err);
+                
+                let errorMessage = '📷 Camera Error: ' + err.message;
+                errorMessage += '\n\n💡 Please check:\n';
+                errorMessage += '• Camera permissions are allowed\n';
+                errorMessage += '• Camera is not being used by another app\n';
+                errorMessage += '• You\'re using HTTPS (required for camera access)';
+                
+                alert(errorMessage);
+            }
+        }
+
+        function captureImage() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            
+            // Draw current video frame to canvas
+            context.drawImage(video, 0, 0, 640, 480);
+            
+            // Hide video, show canvas
+            video.style.display = 'none';
+            canvas.style.display = 'block';
+            
+            // Update button states
+            document.getElementById('captureBtn').style.display = 'none';
+            document.getElementById('retakeBtn').style.display = 'inline-flex';
+            
+            // Convert canvas to data URL for AI analysis
+            const imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            currentImageData = imageDataUrl;
+            
+            showPreview(imageDataUrl);
+            console.log('📸 Image captured successfully');
+        }
+
+        function retakeImage() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            
+            // Show video, hide canvas
+            canvas.style.display = 'none';
+            video.style.display = 'block';
+            
+            // Update button states
+            document.getElementById('retakeBtn').style.display = 'none';
+            document.getElementById('captureBtn').style.display = 'inline-flex';
+            
+            hidePreview();
+            console.log('🔄 Retaking image');
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                console.log('⏹️ Camera stopped');
+            }
+            
+            // Reset camera UI
+            document.getElementById('video').style.display = 'none';
+            document.getElementById('canvas').style.display = 'none';
+            document.getElementById('startBtn').style.display = 'inline-flex';
+            document.getElementById('captureBtn').style.display = 'none';
+            document.getElementById('retakeBtn').style.display = 'none';
+        }
+
+        // ===== PREVIEW HANDLING =====
+        function showPreview(imageSrc) {
+            const previewContainer = document.getElementById('previewContainer');
+            const previewImage = document.getElementById('previewImage');
+            
+            previewImage.src = imageSrc;
+            previewContainer.style.display = 'block';
+            
+            // Trigger AOS animation
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+            
+            console.log('👁️ Preview displayed');
+        }
+
+        function hidePreview() {
+            document.getElementById('previewContainer').style.display = 'none';
+            currentImageData = null;
+        }
+
+        // ===== AI ANALYSIS =====
+        async function analyzeImage() {
+            if (!currentImageData) {
+                alert('⚠️ Please select or capture an image first');
+                return;
+            }
+            
+            if (analysisInProgress) {
+                console.log('⏳ Analysis already in progress');
+                return;
+            }
+            
+            analysisInProgress = true;
+            
+            // Show loading with animated steps
+            showLoadingSteps();
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('predictionSection').style.display = 'none';
+            
+            try {
+                console.log('🤖 Starting AI analysis...');
+                
+                const formData = new FormData();
+                
+                if (typeof currentImageData === 'string') {
+                    // Camera capture (data URL)
+                    formData.append('image_data', currentImageData);
+                    console.log('📸 Sending camera capture to AI');
+                } else {
+                    // File upload
+                    formData.append('file', currentImageData);
+                    console.log('📁 Sending file upload to AI');
+                }
+                
+                // Send to Flask backend
+                const response = await fetch('http://localhost:5001/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.error) {
+                    throw new Error(result.error);
+                } else {
+                    console.log('✅ AI analysis complete:', result);
+                    lastPredictionResult = result;
+                    displayResults(result);
+                }
+                
+            } catch (error) {
+                console.error('❌ Analysis error:', error);
+                
+                let errorMessage = '🚨 AI Analysis Error: ' + error.message;
+                errorMessage += '\n\n💡 Possible solutions:\n';
+                errorMessage += '• Check your internet connection\n';
+                errorMessage += '• Ensure the Flask server is running on port 5001\n';
+                errorMessage += '• Try with a different image\n';
+                errorMessage += '• Refresh the page and try again';
+                
+                alert(errorMessage);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                analysisInProgress = false;
+            }
+        }
+
+        // ===== LOADING ANIMATION =====
+        function showLoadingSteps() {
+            const steps = document.querySelectorAll('.step');
+            let currentStep = 0;
+            
+            // Reset all steps
+            steps.forEach(step => step.classList.remove('active'));
+            
+            // Animate steps sequentially
+            const stepInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    steps[currentStep].classList.add('active');
+                    currentStep++;
+                } else {
+                    clearInterval(stepInterval);
+                    // Loop back to first step if still analyzing
+                    setTimeout(() => {
+                        if (analysisInProgress) {
+                            showLoadingSteps();
+                        }
+                    }, 1000);
+                }
+            }, 800);
+        }
+
+        // ===== RESULTS DISPLAY =====
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('predictionResults');
+            
+            // Get issue emoji based on prediction
+            function getIssueEmoji(className) {
+                const emojis = {
+                    'Normal': '🟢',
+                    'Major Crack': '🔴',
+                    'Minor Crack': '🟡',
+                    'Peeling': '🟠',
+                    'Algae': '🟢',
+                    'Spalling': '🟠',
+                    'Stain': '🟡'
+                };
+                return emojis[className] || '🔵';
+            }
+            
+            // Build results HTML
+            let html = `
+                <div class="ai-status-indicator">
+                    <div class="status-dot"></div>
+                    🤖 AI Analysis Complete
+                </div>
+                
+                <div class="top-prediction">
+                    <h2>${getIssueEmoji(data.predicted_class)} AI Prediction: ${data.predicted_class}</h2>
+                    <div class="confidence-score">${data.max_confidence_percentage.toFixed(1)}%</div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" style="width: ${data.max_confidence_percentage}%"></div>
+                        <div class="confidence-text">Confidence Score</div>
+                    </div>
+                </div>
+                
+                <h3>🏆 Top 3 AI Predictions:</h3>
+            `;
+            
+            // Add top 3 predictions
+            data.all_predictions.slice(0, 3).forEach((pred, index) => {
+                const emoji = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+                const issueEmoji = getIssueEmoji(pred.class_name);
+                
+                html += `
+                    <div class="prediction-item">
+                        <strong>${emoji} ${issueEmoji} ${pred.class_name}</strong>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${pred.percentage}%"></div>
+                            <div class="confidence-text">${pred.percentage.toFixed(1)}%</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsContainer.innerHTML = html;
+            document.getElementById('predictionSection').style.display = 'block';
+            
+            // Trigger animations
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+            
+            console.log('📊 Results displayed successfully');
+        }
+
+        // ===== SAVE TO HISTORY =====
+        function saveToHistory() {
+            if (!lastPredictionResult) {
+                alert('⚠️ No prediction result to save');
+                return;
+            }
+            
+            try {
+                // Get existing history from localStorage
+                let history = JSON.parse(localStorage.getItem('cottagecheck_history') || '[]');
+                
+                // Add current result with timestamp
+                const historyEntry = {
+                    ...lastPredictionResult,
+                    timestamp: new Date().toLocaleString(),
+                    saved_from: 'inspect_page'
+                };
+                
+                history.push(historyEntry);
+                
+                // Keep only last 100 entries
+                if (history.length > 100) {
+                    history = history.slice(-100);
+                }
+                
+                // Save back to localStorage
+                localStorage.setItem('cottagecheck_history', JSON.stringify(history));
+                
+                // Show success message
+                alert('✅ Inspection result saved to history!');
+                console.log('💾 Result saved to history');
+                
+                // Dispatch event for history page updates
+                window.dispatchEvent(new CustomEvent('inspectionComplete', {
+                    detail: historyEntry
+                }));
+                
+            } catch (error) {
+                console.error('❌ Save error:', error);
+                alert('❌ Failed to save to history. Storage may be full.');
+            }
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function resetInspection() {
+            hidePreview();
+            document.getElementById('predictionSection').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            
+            // Reset file input
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            
+            // Stop camera if active
+            stopCamera();
+            
+            currentImageData = null;
+            analysisInProgress = false;
+            lastPredictionResult = null;
+            
+            console.log('🔄 Inspection reset');
+        }
+
+        // ===== EVENT LISTENERS =====
+        
+        // Clean up camera stream when leaving page
+        window.addEventListener('beforeunload', function() {
+            if (stream) {
+                stopCamera();
+            }
+        });
+
+        // Handle visibility change (pause when tab not active)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && stream) {
+                console.log('👁️ Page hidden, camera still active');
+            } else if (!document.hidden && stream) {
+                console.log('👁️ Page visible, camera active');
+            }
+        });
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 AI Inspection interface initialized');
+            
+            // Initialize AOS animations
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    easing: 'ease-out-cubic',
+                    once: true,
+                    offset: 120
+                });
+            }
+            
+            // Check for camera support
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                console.warn('📷 Camera not supported in this browser');
+                const cameraSection = document.querySelector('.camera-section');
+                if (cameraSection) {
+                    cameraSection.innerHTML += `
+                        <div style="background: rgba(220, 53, 69, 0.1); padding: 1rem; border-radius: 8px; color: #dc3545; margin-top: 1rem; text-align: center;">
+                            📷 Camera not supported in this browser. Please use the upload option.
+                        </div>
+                    `;
+                }
+            }
+            
+            // Test Flask connection
+            fetch('http://localhost:5001/')
+                .then(response => {
+                    console.log('✅ Flask server connection successful');
+                })
+                .catch(error => {
+                    console.warn('⚠️ Flask server not accessible:', error.message);
+                    console.log('💡 Make sure Flask server is running on port 5001');
+                });
+        });
+
+        // ===== DEBUGGING HELPERS =====
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            window.inspectDebug = {
+                testUpload: function() {
+                    console.log('🧪 Testing upload functionality');
+                    const fileInput = document.getElementById('fileInput');
+                    fileInput.click();
+                },
+                
+                testCamera: function() {
+                    console.log('🧪 Testing camera functionality');
+                    startCamera();
+                },
+                
+                simulateResult: function() {
+                    console.log('🧪 Simulating AI result');
+                    const mockResult = {
+                        predicted_class: 'Normal',
+                        max_confidence_percentage: 94.5,
+                        all_predictions: [
+                            { class_name: 'Normal', percentage: 94.5 },
+                            { class_name: 'Minor Crack', percentage: 3.2 },
+                            { class_name: 'Stain', percentage: 2.3 }
+                        ]
+                    };
+                    lastPredictionResult = mockResult;
+                    displayResults(mockResult);
+                },
+                
+                resetAll: function() {
+                    console.log('🧪 Resetting all');
+                    resetInspection();
+                },
+                
+                testServer: async function() {
+                    try {
+                        const response = await fetch('http://localhost:5001/');
+                        console.log('🧪 Server test:', response.ok ? 'Connected' : 'Failed');
+                    } catch (e) {
+                        console.log('🧪 Server test: Not running');
+                    }
+                }
+            };
+            
+            console.log('🛠️ Debug tools available: inspectDebug.testUpload(), inspectDebug.testCamera(), inspectDebug.simulateResult(), inspectDebug.testServer()');
+        }
+    </script>
+</body>
+</html>
+</body>
+</html>

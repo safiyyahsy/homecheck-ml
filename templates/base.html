@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HomeCheck - Professional Home Inspection{% endblock %}</title>
+    
+    <!-- Preload custom fonts -->
+    <link rel="preload" href="{{ url_for('static', filename='fonts/agbalumo-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Google Fonts as fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    
+    <!-- Animation Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    
+    <!-- ===== SHARED HEADER NAVIGATION ===== -->
+    <header class="header" id="header">
+        <div class="nav-container">
+            <!-- Logo links back to home -->
+            <a href="{{ url_for('homepage') }}" class="logo">
+                <span class="logo-Home">Home</span><span class="logo-check">Check</span>
+            </a>
+            
+            <!-- Main navigation menu -->
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="{{ url_for('homepage') }}" class="nav-link {% if request.endpoint == 'homepage' %}active{% endif %}">Home</a></li>
+                    <li><a href="{{ url_for('inspection') }}" class="nav-link {% if request.endpoint == 'inspection' %}active{% endif %}">Inspect</a></li>
+                    <li><a href="{{ url_for('history') }}" class="nav-link {% if request.endpoint == 'history' %}active{% endif %}">History</a></li>
+                    <li><a href="{{ url_for('guide') }}" class="nav-link {% if request.endpoint == 'guide' %}active{% endif %}">Guide</a></li>
+                    <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">About</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile menu toggle -->
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ===== SHARED FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-Home">Home</span><span class="logo-check">Check</span>
+                    <p>Preserving Home heritage with modern AI technology</p>
+                </div>
+                <div class="footer-links">
+                    <a href="{{ url_for('homepage') }}">Home</a>
+                    <a href="{{ url_for('inspection') }}">Inspect</a>
+                    <a href="{{ url_for('history') }}">History</a>
+                    <a href="{{ url_for('guide') }}">Guide</a>
+                    <a href="{{ url_for('about') }}">About</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 HomeCheck. Powered by AI for Home owners.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== JAVASCRIPT LIBRARIES ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 120
+        });
+    </script>
+</body>
+</html>

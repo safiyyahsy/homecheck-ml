@@ -1,0 +1,935 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if result.predicted_class == 'Normal' %}
+        Maintenance Report - HomeCheck
+    {% else %}
+        Repair Report - HomeCheck
+    {% endif %}
+{% endblock %}
+
+{% block body_class %}detailed-report-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inspect.css') }}">
+    <style>
+        .report-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--space-xxl) var(--space-lg);
+        }
+
+        .report-header {
+            text-align: center;
+            padding: var(--space-xxl);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .report-header.normal {
+            background: linear-gradient(135deg, #497353 0%, #c3e6cb 100%);
+            border: 2px solid #28a745;
+        }
+
+        .report-header.issue {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid #ffc107;
+        }
+
+        .report-header.critical {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 2px solid #dc3545;
+        }
+
+        .report-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-family: var(--font-accent);
+            margin-bottom: var(--space-md);
+            color: var(--text-on-light);
+        }
+
+        .result-summary {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+            margin-top: var(--space-lg);
+        }
+
+        .prediction-badge {
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .prediction-badge.normal {
+            background: #28a745;
+            color: white;
+        }
+
+        .prediction-badge.issue {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .prediction-badge.critical {
+            background: #dc3545;
+            color: white;
+        }
+
+        .ai-status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(40, 167, 69, 0.1);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            color: #28a745;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .report-sections {
+            display: grid;
+            gap: var(--space-xl);
+        }
+
+        .report-section {
+            background: var(--cottage-white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--cottage-blue);
+        }
+
+        .section-title {
+            font-family: var(--font-accent);
+            font-size: 1.5rem;
+            color: var(--text-on-light);
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        /* Maintenance Guide Styles (Normal Results) */
+        .maintenance-guide-section {
+            background: var(--cottage-white);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-xxl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 2px solid rgba(40, 167, 69, 0.1);
+        }
+
+        .section-header h2 {
+            color: #28a745;
+            font-size: 2rem;
+            margin-bottom: var(--space-md);
+            font-family: var(--font-accent);
+        }
+
+        .maintenance-category {
+            margin-bottom: var(--space-xxl);
+        }
+
+        .maintenance-category h3 {
+            color: var(--cottage-blue);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid rgba(74, 144, 164, 0.1);
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .task-card {
+            background: rgba(40, 167, 69, 0.05);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            transition: transform var(--transition-normal);
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .task-icon {
+            font-size: 2rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .task-card h4 {
+            color: #28a745;
+            margin-bottom: var(--space-md);
+            font-size: 1.2rem;
+        }
+
+        .task-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-card li {
+            padding: var(--space-xs) 0;
+            padding-left: var(--space-md);
+            position: relative;
+        }
+
+        .task-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .next-inspection-section {
+            background: rgba(74, 144, 164, 0.05);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+            margin-top: var(--space-xl);
+        }
+
+        .next-inspection-section h3 {
+            color: var(--cottage-blue);
+            margin-bottom: var(--space-lg);
+        }
+
+        .inspection-schedule {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .schedule-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .schedule-card.recommended {
+            border-left: 4px solid #28a745;
+        }
+
+        .schedule-card.immediate {
+            border-left: 4px solid #ffc107;
+        }
+
+        .schedule-card h4 {
+            margin-bottom: var(--space-md);
+            color: var(--text-on-light);
+        }
+
+        /* Repair Guide Styles (Issue Results) */
+        .urgency-indicator {
+            margin-bottom: var(--space-xl);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .urgency-indicator.critical {
+            background: rgba(220, 53, 69, 0.1);
+            border: 2px solid #dc3545;
+        }
+
+        .urgency-indicator.high {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid #ffc107;
+        }
+
+        .urgency-indicator.medium {
+            background: rgba(74, 144, 164, 0.1);
+            border: 2px solid var(--cottage-blue);
+        }
+
+        .urgency-icon {
+            font-size: 2rem;
+        }
+
+        .warning-box {
+            background: rgba(220, 53, 69, 0.1);
+            border: 2px solid #dc3545;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin: var(--space-md) 0;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .repair-steps {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            background: rgba(74, 144, 164, 0.05);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--cottage-blue);
+        }
+
+        .step-number {
+            background: var(--cottage-blue);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step h4 {
+            margin-bottom: var(--space-xs);
+            color: var(--cottage-blue);
+        }
+
+        .tools-materials-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+
+        .tools-list, .materials-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .tool-item, .material-item {
+            background: rgba(74, 144, 164, 0.05);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--cottage-blue);
+        }
+
+        .estimates-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .cost-estimate, .time-estimate {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .cost-amount, .time-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: var(--space-sm);
+        }
+
+        .prevention-section {
+            background: rgba(40, 167, 69, 0.05);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+        }
+
+        .prevention-tips {
+            display: flex;
+            flex-direction: column; 
+            gap: var(--space-sm);
+        }
+
+        .tip {
+            background: #212529;
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #28a745;
+            position: relative;
+            padding-left: var(--space-xl);
+        }
+
+        .tip:before {
+            content: "💡";
+            position: absolute;
+            left: var(--space-md);
+            top: var(--space-md);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .print-button {
+            background: var(--cottage-steel);
+            color: white;
+        }
+
+        /* Email Template Styles */
+        .email-form-input {
+            width: 100%;
+            padding: var(--space-sm);
+            border: 2px solid rgba(74, 144, 164, 0.2);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-secondary);
+            transition: border-color var(--transition-normal);
+        }
+
+        .email-form-input:focus {
+            outline: none;
+            border-color: var(--cottage-blue);
+        }
+
+        .email-preview-box {
+            background: #212529;
+            border: 1px solid #dee2e6;
+            border-radius: var(--radius-sm);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            font-family: 'DM Sans', sans-serif;
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .report-container {
+                padding: var(--space-xl) var(--space-md);
+            }
+            
+            .task-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tools-materials-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .estimates-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media print {
+            .action-buttons {
+                display: none;
+            }
+            
+            .report-container {
+                padding: 0;
+            }
+            
+            .report-section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="report-container">
+        {% if result %}
+            <!-- Report Header - SIMPLIFIED (NO CONFIDENCE %) -->
+            <div class="report-header {{ 'normal' if result.predicted_class == 'Normal' else ('critical' if result.predicted_class == 'Major Crack' else 'issue') }}" data-aos="fade-up">
+                <h1 class="report-title">
+                    {% if result.predicted_class == 'Normal' %}
+                        🏠 Home Maintenance Report
+                    {% else %}
+                        🔧 Home Repair Report
+                    {% endif %}
+                </h1>
+                
+                <div class="result-summary">
+                    <div class="prediction-badge {{ 'normal' if result.predicted_class == 'Normal' else ('critical' if result.predicted_class == 'Major Crack' else 'issue') }}">
+                        {{ get_issue_emoji(result.predicted_class) }} {{ result.predicted_class }}
+                    </div>
+                    <div class="ai-status-indicator">
+                        <div class="status-dot"></div>
+                        AI Analysis Complete
+                    </div>
+                </div>
+                
+                <div class="report-meta">
+                    <p><strong>Inspection Date:</strong> {{ result.timestamp }}</p>
+                </div>
+            </div>
+
+            <!-- Main Content - Conditional Based on Result Type -->
+            {% if result.predicted_class == 'Normal' %}
+                <!-- ========== NORMAL RESULT: MAINTENANCE GUIDE ========== -->
+                <div class="maintenance-guide-section">
+                    <div class="section-header">
+                        <h2>✅ Great News! Your Home is in Good Condition</h2>
+                        <p>Our AI analysis found no structural issues. Keep up the excellent maintenance with these proactive care tips.</p>
+                    </div>
+
+                    <!-- Monthly Maintenance Tasks -->
+                    <div class="maintenance-category">
+                        <h3>📅 Monthly Tasks</h3>
+                        <div class="task-grid">
+                            <div class="task-card">
+                                <div class="task-icon">🔍</div>
+                                <h4>Visual Inspection</h4>
+                                <ul>
+                                    <li>Walk around exterior walls</li>
+                                    <li>Check for new cracks or damage</li>
+                                    <li>Look for signs of pest activity</li>
+                                    <li>Inspect foundation for settling</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="task-card">
+                                <div class="task-icon">🚰</div>
+                                <h4>Drainage Check</h4>
+                                <ul>
+                                    <li>Clear gutters of debris</li>
+                                    <li>Check downspout connections</li>
+                                    <li>Ensure water flows away from foundation</li>
+                                    <li>Remove standing water</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next AI Inspection Schedule -->
+                    <div class="next-inspection-section">
+                        <h3>🤖 Next AI Inspection</h3>
+                        <div class="inspection-schedule">
+                            <div class="schedule-card recommended">
+                                <h4>📅 Recommended Schedule</h4>
+                                <p><strong>Next AI Inspection:</strong> 6-12 months</p>
+                                <p>Since your home is in good condition, annual AI inspections are sufficient for monitoring.</p>
+                            </div>
+                            
+                            <div class="schedule-card immediate">
+                                <h4>⚠️ Immediate Inspection If:</h4>
+                                <ul>
+                                    <li>Severe weather damage occurs</li>
+                                    <li>New cracks appear</li>
+                                    <li>Water damage is suspected</li>
+                                    <li>Structural changes are made</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+                <!-- ========== ISSUE RESULT: REPAIR GUIDE ========== -->
+                <div class="repair-guide-section">
+                    <div class="section-header">
+                        <h2>🔧 Issue Detected: {{ result.predicted_class }}</h2>
+                        <p>Our AI has identified structural concerns that require attention. Follow this comprehensive repair guide.</p>
+                    </div>
+
+                    <!-- Urgency Level -->
+                    <div class="urgency-indicator {{ 'critical' if result.predicted_class == 'Major Crack' else ('high' if result.predicted_class in ['Minor Crack', 'Spalling'] else 'medium') }}">
+                        {% if result.predicted_class == 'Major Crack' %}
+                            <span class="urgency-icon">🚨</span>
+                            <div>
+                                <h3>Critical Priority</h3>
+                                <p>Immediate professional attention required. Do not delay repairs.</p>
+                            </div>
+                        {% elif result.predicted_class in ['Minor Crack', 'Spalling'] %}
+                            <span class="urgency-icon">⚠️</span>
+                            <div>
+                                <h3>High Priority</h3>
+                                <p>Address within 1-2 weeks to prevent further damage.</p>
+                            </div>
+                        {% else %}
+                            <span class="urgency-icon">🟡</span>
+                            <div>
+                                <h3>Medium Priority</h3>
+                                <p>Address within 1-3 months. Monitor for worsening.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Report Sections -->
+                    <div class="report-sections">
+                        <!-- Summary & Action Section -->
+                        <div class="report-section" data-aos="fade-up" data-aos-delay="200">
+                            <h3 class="section-title">📋 Summary & Recommended Action</h3>
+                            <p><strong>Status:</strong> {{ recommendation.status|title }}</p>
+                            <p><strong>Summary:</strong> {{ recommendation.summary }}</p>
+                            <p><strong>Recommended Action:</strong> {{ recommendation.action }}</p>
+                        </div>
+
+                        <!-- DIY Instructions Section (if applicable) -->
+                        {% if recommendation.diy_possible %}
+                        <div class="report-section" data-aos="fade-up" data-aos-delay="300">
+                            <h3 class="section-title">🔧 DIY Repair Instructions</h3>
+                            
+                            {% if result.predicted_class == 'Major Crack' %}
+                                <div class="warning-box">
+                                    <strong>⚠️ Professional Required:</strong> Major cracks indicate potential structural issues. Contact a qualified contractor immediately.
+                                </div>
+                            {% else %}
+                                <div class="repair-steps">
+                                    {% for step in recommendation.steps %}
+                                        <div class="step">
+                                            <span class="step-number">{{ loop.index }}</span>
+                                            <div>
+                                                <h4>Step {{ loop.index }}</h4>
+                                                <p>{{ step }}</p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Tools and Materials -->
+                        {% if recommendation.materials or recommendation.tools %}
+                        <div class="report-section" data-aos="fade-up" data-aos-delay="400">
+                            <h3 class="section-title">🛠️ Tools & Materials</h3>
+                            <div class="tools-materials-section">
+                                {% if recommendation.tools %}
+                                <div class="tools-column">
+                                    <h4>🔧 Tools Needed</h4>
+                                    <div class="tools-list">
+                                        {% for tool in recommendation.tools %}
+                                            <div class="tool-item">{{ tool }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if recommendation.materials %}
+                                <div class="materials-column">
+                                    <h4>🧱 Materials Needed</h4>
+                                    <div class="materials-list">
+                                        {% for material in recommendation.materials %}
+                                            <div class="material-item">{{ material }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Cost and Time Estimates -->
+                        <div class="report-section" data-aos="fade-up" data-aos-delay="500">
+                            <h3 class="section-title">💰 Cost & Time Estimates</h3>
+                            <div class="estimates-section">
+                                <div class="cost-estimate">
+                                    <h4>💰 Estimated Cost</h4>
+                                    <span class="cost-amount">{{ recommendation.estimated_cost }}</span>
+                                    <p>For DIY materials (professional costs vary)</p>
+                                </div>
+
+                                <div class="time-estimate">
+                                    <h4>⏱️ Time Required</h4>
+                                    <span class="time-amount">{{ recommendation.timeframe }}</span>
+                                    <p>Plus drying/curing time</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prevention Tips -->
+                        <div class="report-section" data-aos="fade-up" data-aos-delay="600">
+                            <h3 class="section-title">🛡️ Prevention Tips</h3>
+                            <div class="prevention-section">
+                                <div class="prevention-tips">
+                                    {% if result.predicted_class == 'Minor Crack' %}
+                                        <div class="tip">Regular inspection for early crack detection</div>
+                                        <div class="tip">Maintain proper drainage around foundation</div>
+                                        <div class="tip">Seal cracks immediately when they appear</div>
+                                        <div class="tip">Monitor for seasonal expansion/contraction</div>
+                                    {% elif result.predicted_class == 'Peeling' %}
+                                        <div class="tip">Use high-quality paint and primer</div>
+                                        <div class="tip">Ensure proper surface preparation</div>
+                                        <div class="tip">Paint in appropriate weather conditions</div>
+                                        <div class="tip">Regular cleaning and maintenance</div>
+                                    {% elif result.predicted_class == 'Algae' %}
+                                        <div class="tip">Improve air circulation around affected areas</div>
+                                        <div class="tip">Reduce moisture sources</div>
+                                        <div class="tip">Trim vegetation to increase sunlight</div>
+                                        <div class="tip">Apply preventive treatments annually</div>
+                                    {% else %}
+                                        <div class="tip">Regular maintenance and inspection</div>
+                                        <div class="tip">Address issues promptly when noticed</div>
+                                        <div class="tip">Use quality materials and proper techniques</div>
+                                        <div class="tip">Consider professional inspection annually</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email Template Section - Only for Issues -->
+                        <div class="report-section" data-aos="fade-up" data-aos-delay="700">
+                            <h3 class="section-title">📧 Contact Professional Help</h3>
+                            <p>Need to contact a professional? Generate a ready-to-send email template with your inspection details.</p>
+                            
+                            <!-- Quick Contact Form -->
+                            <div style="background: rgba(74, 144, 164, 0.05); padding: var(--space-lg); border-radius: var(--radius-md); margin: var(--space-md) 0;">
+                                <h4 style="color: var(--cottage-blue); margin-bottom: var(--space-md);">📝 Your Contact Information</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-md);">
+                                    <div>
+                                        <label for="homeowner_name" style="display: block; font-weight: 600; margin-bottom: var(--space-xs);">Your Name:</label>
+                                        <input type="text" id="homeowner_name" placeholder="Enter your full name" class="email-form-input">
+                                    </div>
+                                    <div>
+                                        <label for="phone" style="display: block; font-weight: 600; margin-bottom: var(--space-xs);">Phone:</label>
+                                        <input type="tel" id="phone" placeholder="Your phone number" class="email-form-input">
+                                    </div>
+                                </div>
+                                <div style="margin-top: var(--space-md);">
+                                    <label for="home_address" style="display: block; font-weight: 600; margin-bottom: var(--space-xs);">Home Address:</label>
+                                    <input type="text" id="home_address" placeholder="Enter home address" class="email-form-input">
+                                </div>
+                            </div>
+                            
+                            <!-- Email Preview -->
+                            <div class="email-preview-box">
+                                <div style="margin-bottom: var(--space-md); font-weight: bold;">
+                                    Subject: Home Inspection - {{ result.predicted_class }} Repair Request
+                                </div>
+                                <div id="email_preview">
+                                    <strong>Dear Professional,</strong><br><br>
+                                    
+                                    I hope this email finds you well. I am reaching out regarding repair work needed at my home property.<br><br>
+                                    
+                                    <strong>INSPECTION DETAILS:</strong><br>
+                                    • Issue Detected: {{ result.predicted_class }}<br>
+                                    • Detection Method: AI-powered home inspection<br>
+                                    • Inspection Date: {{ result.timestamp }}<br><br>
+                                    
+                                    <strong>PROPERTY INFORMATION:</strong><br>
+                                    • Property Owner: <span id="preview_name">[Your Name]</span><br>
+                                    • Home Address: <span id="preview_address">[Home Address]</span><br>
+                                    • Contact Phone: <span id="preview_phone">[Your Phone]</span><br><br>
+                                    
+                                    <strong>ISSUE DESCRIPTION:</strong><br>
+                                    Our AI inspection system has detected {{ result.predicted_class.lower() }} that requires professional attention. 
+                                    {% if result.predicted_class == 'Major Crack' %}This appears to be a structural issue that needs immediate assessment by a qualified structural engineer.
+                                    {% elif result.predicted_class == 'Minor Crack' %}While this may be repairable, we would like professional evaluation to ensure proper treatment.
+                                    {% elif result.predicted_class == 'Peeling' %}The paint and surface deterioration affects both protection and aesthetics of our home.
+                                    {% elif result.predicted_class == 'Algae' %}There are moisture and algae issues that need professional cleaning and prevention strategies.
+                                    {% elif result.predicted_class == 'Spalling' %}The concrete/masonry deterioration requires professional repair to prevent further damage.
+                                    {% elif result.predicted_class == 'Stain' %}Surface staining issues need professional assessment and treatment.
+                                    {% endif %}<br><br>
+                                    
+                                    <strong>WHAT WE'RE LOOKING FOR:</strong><br>
+                                    • Professional assessment of the detected issue<br>
+                                    • Detailed quote for repair work<br>
+                                    • Timeline for completion<br>
+                                    • Warranty information on work performed<br>
+                                    • References from similar residential projects<br><br>
+                                    
+                                    We appreciate your time and look forward to hearing from you.<br><br>
+                                    
+                                    Best regards,<br>
+                                    <span id="preview_name_end">[Your Name]</span><br><br>
+                                    
+                                    <em>---<br>
+                                    This inquiry was generated through HomeCheck AI Inspection System</em>
+                                </div>
+                            </div>
+                            
+                            <!-- Professional Recommendations -->
+                            <div style="background: rgba(40, 167, 69, 0.05); border: 1px solid rgba(40, 167, 69, 0.2); border-radius: var(--radius-md); padding: var(--space-lg); margin: var(--space-lg) 0;">
+                                <h4 style="color: #28a745; margin-bottom: var(--space-md);">🔍 Recommended Professionals for {{ result.predicted_class }}</h4>
+                                {% if result.predicted_class == 'Major Crack' %}
+                                    <ul style="margin: 0; padding-left: var(--space-lg);">
+                                        <li><strong>Structural Engineer:</strong> First priority for assessment</li>
+                                        <li><strong>General Contractor:</strong> For repair implementation</li>
+                                        <li><strong>Foundation Specialist:</strong> If foundation-related</li>
+                                    </ul>
+                                {% elif result.predicted_class == 'Minor Crack' %}
+                                    <ul style="margin: 0; padding-left: var(--space-lg);">
+                                        <li><strong>General Contractor:</strong> For evaluation and repair</li>
+                                        <li><strong>Handyman:</strong> For simple crack filling</li>
+                                        <li><strong>Painter:</strong> For finishing work</li>
+                                    </ul>
+                                {% elif result.predicted_class == 'Peeling' %}
+                                    <ul style="margin: 0; padding-left: var(--space-lg);">
+                                        <li><strong>House Painter:</strong> Specialized in exterior work</li>
+                                        <li><strong>General Contractor:</strong> For extensive surface prep</li>
+                                        <li><strong>Restoration Specialist:</strong> For historic homes</li>
+                                    </ul>
+                                {% elif result.predicted_class == 'Algae' %}
+                                    <ul style="margin: 0; padding-left: var(--space-lg);">
+                                        <li><strong>Pressure Washing Service:</strong> For cleaning</li>
+                                        <li><strong>Landscaper:</strong> For drainage improvements</li>
+                                        <li><strong>General Contractor:</strong> For structural modifications</li>
+                                    </ul>
+                                {% elif result.predicted_class == 'Spalling' %}
+                                    <ul style="margin: 0; padding-left: var(--space-lg);">
+                                        <li><strong>Mason:</strong> For concrete/brick repair</li>
+                                        <li><strong>Concrete Contractor:</strong> For extensive damage</li>
+                                        <li><strong>General Contractor:</strong> For comprehensive repairs</li>
+                                    </ul>
+                                {% elif result.predicted_class == 'Stain' %}
+                                    <ul style="margin: 0; padding-left: var(--space-lg);">
+                                        <li><strong>Cleaning Service:</strong> For stain removal</li>
+                                        <li><strong>Restoration Specialist:</strong> For stubborn stains</li>
+                                        <li><strong>Painter:</strong> If repainting is needed</li>
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Copy Email Button -->
+                            <div style="text-align: center; margin-top: var(--space-lg);">
+                                <button class="cta-button secondary" onclick="copyEmailTemplate()" style="margin-right: var(--space-md);">
+                                    <span class="button-text">📋 Copy Email</span>
+                                </button>
+                                <button class="cta-button secondary" onclick="updateEmailPreview()">
+                                    <span class="button-text">🔄 Update Preview</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="{{ url_for('inspection') }}" class="cta-button primary">
+                    <span class="button-text">🔄 New AI Inspection</span>
+                </a>
+                <a href="{{ url_for('history') }}" class="cta-button secondary">
+                    <span class="button-text">📊 View History</span>
+                </a>
+                {% if result.predicted_class != 'Normal' %}
+                    <a href="{{ url_for('email_template', issue_type=result.predicted_class) }}" class="cta-button secondary">
+                        <span class="button-text">📧 Full Email Template</span>
+                    </a>
+                    <button class="cta-button print-button" onclick="window.print()">
+                        <span class="button-text">🖨️ Print Report</span>
+                    </button>
+                {% endif %}
+            </div>
+
+        {% else %}
+            <!-- No Results State -->
+            <div class="empty-state" data-aos="fade-up">
+                <div class="empty-state-icon">📋</div>
+                <h3>No Inspection Results Found</h3>
+                <p>Please complete an AI inspection first to view detailed results.</p>
+                <a href="{{ url_for('inspection') }}" class="cta-button primary" style="margin-top: var(--space-lg);">
+                    <span class="button-text">🚀 Start AI Inspection</span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        // Update email preview with form data
+        function updateEmailPreview() {
+            const name = document.getElementById('homeowner_name').value || '[Your Name]';
+            const address = document.getElementById('home_address').value || '[Home Address]';
+            const phone = document.getElementById('phone').value || '[Your Phone]';
+            
+            // Update preview spans
+            document.getElementById('preview_name').textContent = name;
+            document.getElementById('preview_address').textContent = address;
+            document.getElementById('preview_phone').textContent = phone;
+            document.getElementById('preview_name_end').textContent = name;
+            
+            console.log('📧 Email preview updated');
+        }
+
+        // Copy email template to clipboard
+        async function copyEmailTemplate() {
+            const emailPreview = document.getElementById('email_preview');
+            const emailText = emailPreview.innerText || emailPreview.textContent;
+            
+            try {
+                await navigator.clipboard.writeText(emailText);
+                
+                // Show success feedback
+                const button = event.target.closest('button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<span class="button-text">✅ Copied!</span>';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+                
+                console.log('📋 Email template copied to clipboard');
+                
+            } catch (err) {
+                console.error('Copy failed:', err);
+                
+                // Fallback: select text
+                const range = document.createRange();
+                range.selectNode(emailPreview);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                
+                alert('Email template selected - please copy manually (Ctrl+C)');
+            }
+        }
+
+        // Auto-update preview when form fields change
+        document.addEventListener('DOMContentLoaded', function() {
+            const formInputs = ['homeowner_name', 'home_address', 'phone'];
+            
+            formInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('input', function() {
+                        // Debounce the update
+                        clearTimeout(this.updateTimeout);
+                        this.updateTimeout = setTimeout(updateEmailPreview, 300);
+                    });
+                }
+            });
+            
+            console.log('📧 Email template auto-update initialized');
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}About HomeCheck - AI-Powered Home Inspection{% endblock %}
+
+{% block body_class %}about-page{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inspect.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="about-container">
+        <!-- Page Hero -->
+        <section class="page-hero" data-aos="fade-up">
+            <div class="page-hero-left">
+                <div class="ai-badge">
+                    <div>🤖 AI-Powered</div>
+                    <div>🏠 Heritage-Focused</div>
+                    <div>🌿 Sustainable</div>
+                </div>
+            </div>
+            <div class="page-hero-right">
+                <h1 class="hero-title">About HomeCheck</h1>
+                <p class="hero-subtitle">
+                    An early-stage project using AI to support smarter, faster home inspections.
+                </p>
+            </div>
+        </section>
+
+        <!-- Mission Statement -->
+        <section class="content-section" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="section-title">🎯 Our Mission</h2>
+            <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: var(--space-lg);">
+                At HomeCheck, we believe every home tells a story. Our mission is to make basic home defect detection more accessible using AI and image analysis. 
+                HomeCheck aims to assist users in identifying visible issues in homes — like cracks or stains — as an early step toward professional inspection.
+            </p>
+            
+            <div class="mission-grid">
+                <div class="mission-card">
+                    <div class="mission-icon">🏠</div>
+                    <h4>Preserve Heritage</h4>
+                    <p>Protecting the character of homes while ensuring structural integrity for future generations.</p>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-icon">🤖</div>
+                    <h4>AI Innovation</h4>
+                    <p>Leveraging machine learning to detect issues early and provide actionable maintenance insights.</p>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-icon">🌿</div>
+                    <h4>Sustainable Care</h4>
+                    <p>Promoting eco-friendly maintenance practices that honor traditional craftsmanship.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Section -->
+        <section class="content-section" data-aos="fade-up" data-aos-delay="200">
+            <h2 class="section-title">🧠 Our AI Technology</h2>
+            <p style="margin-bottom: var(--space-lg);">
+                HomeCheck is powered by an AI image classification model trained on a curated dataset of approximately 10,000 residential images. 
+                Using deep learning — specifically Convolutional Neural Networks (CNNs) — the system learns to recognize patterns in home photos 
+                and classify them into six categories: cracks, stains, algae, spalling, peeling, and normal conditions.
+            </p>
+            
+            <div class="technology-grid">
+                <div class="tech-feature">
+                    <h4>🎯 Targeted Detection</h4>
+                    <p>Detects six common home surface issues: cracks, stains, algae, spalling, peeling, and normal conditions.</p>
+                </div>
+                
+                <div class="tech-feature">
+                    <h4>⚡ Fast Feedback</h4>
+                    <p>Provides instant image analysis to help users quickly identify potential issues in their homes.</p>
+                </div>
+                
+                <div class="tech-feature">
+                    <h4>📊 Detailed Reports</h4>
+                    <p>Generates comprehensive digital reports with images and recommendations for each issue.</p>
+                </div>
+
+                <div class="tech-feature">
+                    <h4>🌍 Web-Based</h4>
+                    <p>Fully accessible via browser — no installation required. Works on both desktop and mobile devices.</p>
+                </div>
+                
+                <div class="tech-feature">
+                    <h4>📸 Image-Based</h4>
+                    <p>Users can upload images of home surfaces to receive immediate defect predictions from the model</p>
+                </div>  
+
+                <div class="tech-feature">
+                    <h4>🔄 Learning Potential</h4>
+                    <p>The system can be improved in future iterations by incorporating more training data and user feedback.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="content-section" data-aos="fade-up" data-aos-delay="300">
+            <h2 class="section-title">📊 Development Stats</h2>
+            <div class="stats-showcase">
+                <div class="stat-item">
+                    <span class="stat-number">10,000+</span>
+                    <span>Images Used for Training</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span>Defect Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span>Availability</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span>Digital Reports</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="content-section" data-aos="fade-up" data-aos-delay="400">
+            <h2 class="section-title">👤 About the Creator</h2>
+            
+            <div class="creator-section">
+                <!-- Left: Text -->
+                <div class="creator-text">
+                    <h3 title="Hi there! I'm Safiyyah 👋">Ms. Safiyyah</h3>
+                    <h4>Developer & Researcher</h4>
+            
+                    <p>
+                        HomeCheck was created by <strong>Safiyyah</strong>, a final year student at <strong>UiTM Shah Alam</strong> 
+                        studying Information Technology (Hons.) Intelligent Systems Engineering. As a solo developer, she led every 
+                        aspect of this AI-powered home inspection app — from data curation and CNN training to interface design and deployment.
+                    
+                        With a passion for applying AI to real-world problems, Safiyyah aims to make home maintenance more accessible and efficient. 
+                        HomeCheck is her first major project, combining her interests in machine learning, web development, and heritage preservation.
+                    </p>
+                    <p style="margin-top: var(--space-sm);">
+                        <a href="https://www.linkedin.com/in/nsin28" target="_blank" class="linkedin-button">
+                            <span>🔗 Connect on LinkedIn</span>
+                        </a>
+                    </p>
+
+                </div>
+
+                <!-- Right: Image -->
+                <div class="creator-image">
+                    <img src="{{ url_for('static', filename='images/safiyyah.png') }}" alt="Safiyyah">
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Company Timeline -->
+        <section class="content-section" data-aos="fade-up" data-aos-delay="500">
+            <h2 class="section-title">📅 Our Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024</div>
+                        <h4>Ideation</h4>
+                        <p>The idea for HomeCheck was born as part of an academic project, focusing on the application of AI for real-world use in home inspections.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2024</div>
+                        <h4>Model Development</h4>
+                        <p>Collected and labeled a dataset of ~10,000 images. Built and trained a CNN model to classify home defects.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <h4>Prototype Launch</h4>
+                        <p>Developed and deployed a web-based platform allowing users to upload images and receive AI-powered feedback.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <h4>Ongoing Development</h4>
+                        <p>Planning to expand the system with mobile app support and model improvements based on new data and user testing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Values Section -->
+        <section class="content-section" data-aos="fade-up" data-aos-delay="600">
+            <h2 class="section-title">💎 Our Values</h2>
+            <div class="mission-grid">
+                <div class="mission-card">
+                    <div class="mission-icon">🔍</div>
+                    <h4>Practical Accuracy</h4>
+                    <p>We aim to build models that give helpful and relevant results for common visual home issues.</p>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-icon">🤝</div>
+                    <h4>Accessible Tools</h4>
+                    <p>We believe that early home checks shouldn't require expensive services — a basic image and a smartphone should be enough to start.</p>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-icon">🌱</div>
+                    <h4>Simplicity with Impact</h4>
+                    <p>Instead of overwhelming features, we focus on delivering one simple yet useful outcome: a quick idea of what might be wrong.</p>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-icon">📚</div>
+                    <h4>Learning-Oriented</h4>
+                    <p>We're constantly learning — from the data, from feedback, and from real users. We treat this app as a work in progress with growing potential.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section" data-aos="fade-up" data-aos-delay="700">
+            <h3>Ready to Experience AI-Powered Home Inspection?</h3>
+            <p>Join thousands of homeowners who trust HomeCheck to keep their properties safe and well-maintained.</p>
+            
+            <div class="cta-buttons">
+                <a href="{{ url_for('inspection') }}" class="cta-button primary">
+                    <span class="button-text">🚀 Start Free Inspection</span>
+                </a>
+                <a href="{{ url_for('guide') }}" class="cta-button secondary">
+                    <span class="button-text">📖 Read User Guide</span>
+                </a>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/about.js') }}"></script>
+{% endblock %}
