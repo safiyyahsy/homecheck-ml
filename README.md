@@ -84,7 +84,7 @@ Final Year Project (FYP) | Universiti Teknologi MARA (UiTM) | Intelligent System
 | EfficientNet | Adam | 0.001 | 89.09% | 82.81% | 84.39% |
 | ResNet50 | Adam | 0.00001 | 74.22% | 75.19% | 77.04% |
 
-**Complete experimental results:** See [EXPERIMENTS.md](experiments/EXPERIMENTS.md) for full 33-experiment comparison table.
+**Complete experimental results:** See [EXPERIMENTS.md](EXPERIMENTS.md) for full 33-experiment comparison table.
 
 ---
 
@@ -134,7 +134,7 @@ Final Year Project (FYP) | Universiti Teknologi MARA (UiTM) | Intelligent System
 - Validation: 15%
 - Testing: 15%
 
-**Dataset Access:** [Available in Google Drive](your-drive-link-here)
+**Dataset Access:** [Available in Google Drive](https://drive.google.com/drive/folders/1o0v40q8LIlEa4qsWHE6d7QDgDI59HgQL?usp=drive_link)
 
 ---
 
