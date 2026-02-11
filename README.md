@@ -12,7 +12,7 @@
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 HomeCheck is a CNN-based image classification system developed to automatically detect and classify home defects from images. This project demonstrates a **systematic machine learning research approach**, evaluating multiple architectures, fine-tuning strategies, optimizers, and learning rates to achieve optimal performance.
 
@@ -21,7 +21,7 @@ Final Year Project (FYP) | Universiti Teknologi MARA (UiTM) | Intelligent System
 
 ---
 
-## ✨ Key Achievements
+## Key Achievements
 
 - **97.77% test accuracy** on home defect classification
 - **33+ experiments** systematically conducted and documented
@@ -33,7 +33,7 @@ Final Year Project (FYP) | Universiti Teknologi MARA (UiTM) | Intelligent System
 
 ---
 
-## 📊 Experimental Methodology
+## Experimental Methodology
 
 ### Phase 1: Architecture & Fine-Tuning Strategy Selection
 
@@ -129,16 +129,11 @@ Final Year Project (FYP) | Universiti Teknologi MARA (UiTM) | Intelligent System
 - Normalization (pixel values scaled to [0, 1])
 - Data augmentation (rotation, flipping, zooming, brightness adjustment)
 
-**Split:**
-- Training: 70%
-- Validation: 15%
-- Testing: 15%
-
 **Dataset Access:** [Available in Google Drive](https://drive.google.com/drive/folders/1o0v40q8LIlEa4qsWHE6d7QDgDI59HgQL?usp=drive_link)
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Machine Learning:**
 - Python 3.8+
@@ -152,14 +147,13 @@ Final Year Project (FYP) | Universiti Teknologi MARA (UiTM) | Intelligent System
 - Responsive design
 
 **Development Environment:**
-- Google Colab (model training)
-- Jupyter Notebooks (experimentation)
+- Google Colab (model training & experimentation)
 - VSCode (Flask development)
 
 ---
 
-## 📁 Repository Structure
-
+## Repository Structure
+```text
 homecheck-ml/
 ├── README.md # Project overview (this file)
 ├── EXPERIMENTS.md # Complete experimental results
@@ -186,11 +180,12 @@ homecheck-ml/
 │ ├── history.html
 │ └── detailed_report.html
 └── .gitignore
+```
 - VSCode (Flask development)
 
 ---
 
-## 🚀 Installation & Usage
+## Installation & Usage
 
 ### Prerequisites
 ```bash
@@ -224,7 +219,7 @@ http://localhost:5000
 4. View detailed classification results and confidence scores
 5. Access inspection history for past analyses
 
-## 🔬 Research Methodology
+## Research Methodology
 1. Literature Review
 - Studied CNN architectures for image classification
 - Reviewed transfer learning best practices
@@ -250,7 +245,7 @@ http://localhost:5000
 - User-friendly interface design
 - Inspection history tracking
 
-## 📈 Key Learnings & Insights
+## Key Learnings & Insights
 # Technical Insights
 1. Fine-Tuning Strategy Matters:
 - Partial freeze significantly outperformed full freeze
@@ -277,7 +272,7 @@ http://localhost:5000
 - Validation strategy (train/val/test split) critical for reliable results
 - Iterative refinement based on experimental results leads to optimal solution
 
-## 🎓 Academic Contributions
+## Academic Contributions
 # Skills Demonstrated:
 - Machine learning model selection and evaluation
 - Transfer learning and fine-tuning techniques
@@ -306,19 +301,6 @@ http://localhost:5000
 
 ---
 
-## 🔮 Future Improvements
-
-- [ ] Expand to more defect categories (currently 7)
-- [ ] Implement confidence thresholds for predictions
-- [ ] Add explainability (Grad-CAM visualization)
-- [ ] Deploy to cloud platform (AWS/GCP/Azure)
-- [ ] Create mobile application version
-- [ ] Implement batch processing for multiple images
-- [ ] Add user authentication and data storage
-- [ ] Continuous learning pipeline with user feedback
-
----
-
 ## 👤 Author
 
 **Nur Safiyyah Insyirah Nordin**
@@ -334,13 +316,13 @@ Universiti Teknologi MARA (UiTM) | CGPA: 3.72/4.00 | Expected Graduation: Januar
 
 ---
 
-## 📄 License
+## License
 
 This project is available for educational and portfolio purposes. For usage permissions, please contact the author.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **UiTM Faculty of Computer and Mathematical Sciences** for academic guidance
 - **Project supervisors** for methodology support and feedback
@@ -349,15 +331,6 @@ This project is available for educational and portfolio purposes. For usage perm
 
 ---
 
-## 📚 References
-
-- MobileNetV2: [Sandler et al., 2018](https://arxiv.org/abs/1801.04381)
-- EfficientNet: [Tan & Le, 2019](https://arxiv.org/abs/1905.11946)
-- ResNet: [He et al., 2015](https://arxiv.org/abs/1512.03385)
-- Transfer Learning: [Pan & Yang, 2010](https://ieeexplore.ieee.org/document/5288526)
-
----
-
 **⭐ If you find this research useful, please star the repository!**
 
-**📫 For questions about methodology or collaboration, feel free to reach out.**
+** For questions about methodology or collaboration, feel free to reach out.**
