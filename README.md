@@ -5,6 +5,7 @@
 </p>
 
 > Deep learning-based home inspection assistant using systematic CNN architecture comparison, fine-tuning strategy evaluation, and hyperparameter optimization.
+> Slides Presentation during Final Year: [Slides](https://www.canva.com/design/DAGXOFI9Rp4/OyXY17FATSZYYU1MAEDTJg/edit?utm_content=DAGXOFI9Rp4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.19-orange.svg)](https://www.tensorflow.org/)
