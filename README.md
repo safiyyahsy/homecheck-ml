@@ -310,7 +310,7 @@ http://localhost:5000
 **Nur Safiyyah Insyirah Nordin**
 
 📧 Email: safiyyahsy28@gmail.com  
-🌐 Portfolio: [https://safiyyahsy.github.io/sfyhportfolio/](https://safiyyahsy.github.io/sfyhportfolio/)  
+🌐 Portfolio: [https://safiyyahsy.github.io/sfyhportfolio/](https://safiyyahsy.github.io/sfyhportfolio/aboutme/)  
 💼 LinkedIn: [Your LinkedIn](https://linkedin.com/in/nsin28)  
 🐙 GitHub: [@safiyyahsy](https://github.com/safiyyahsy)
 
