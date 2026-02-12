@@ -8,6 +8,8 @@
 
 > Slides Presentation during Final Year: [Slides](https://www.canva.com/design/DAGXOFI9Rp4/OyXY17FATSZYYU1MAEDTJg/edit?utm_content=DAGXOFI9Rp4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
+> Demonstration Video: [Demo Video](https://www.canva.com/design/DAGt4al5RdQ/6ZFyOyH5-xCl_Tu_DwaALw/watch?utm_content=DAGt4al5RdQ&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h9fda15e853) 
+
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.19-orange.svg)](https://www.tensorflow.org/)
 [![License](https://img.shields.io/badge/License-Educational-green.svg)]()
